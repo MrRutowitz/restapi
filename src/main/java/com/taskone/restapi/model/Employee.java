@@ -25,7 +25,7 @@ public class Employee {
     public String username;
     public String email;
     public String jobposition;
-    public Long salary;
+    public Integer salary;
 
 
 

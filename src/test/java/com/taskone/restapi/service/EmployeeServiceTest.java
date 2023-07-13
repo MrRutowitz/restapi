@@ -35,7 +35,7 @@ class EmployeeServiceTest {
 
         List<Employee> allEmployees = employeeService.list();
         assertNotNull(allEmployees);
-        assertEquals(10,allEmployees.size());
+        assertEquals(11,allEmployees.size());
     }
 
 

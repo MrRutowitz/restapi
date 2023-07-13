@@ -1,4 +1,4 @@
-package com.taskone.restapi;
+package com.taskone.restapi.mock;
 
 import com.taskone.restapi.controller.EmployeeController;
 import com.taskone.restapi.model.Employee;
@@ -19,6 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -38,6 +39,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 //@RunWith(SpringRunner.class)
 //@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @WebMvcTest(EmployeeController.class)
+@ActiveProfiles(value = "dev")
 public class MockTestCorrect {
 
     @MockBean
@@ -66,6 +68,11 @@ public class MockTestCorrect {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Leanne"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].email").value("Sincere@april.biz"));
     }
+
+
+
+
+
 
 
 

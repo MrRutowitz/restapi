@@ -21,9 +21,12 @@ class EmployeeControllerTest {
     void shouldWelcomeEmployee(){
         EmployeeService employeeService = Mockito.mock(EmployeeService.class);
         when(employeeService.welcomeMessage("Michal")).thenReturn("Welcome Michal!");
+
         EmployeeController employeeController = new EmployeeController(employeeService);
         assertEquals("Welcome Michal!", employeeController.welcome("Michal"));
     }
+
+
 
 
 

@@ -44,20 +44,6 @@ class EmployeeServiceTest {
         assertEquals(11,allEmployees.size());
     }
 
-    @Test
-    void checkEmpolyeById(){
-
-        ResponseEntity<Employee> employeeResponseEntity = new ResponseEntity<>(HttpStatus.ACCEPTED);
-
-
-    }
-
-
-
-
-
-
-
 
 //    @Test
 //    void shouldActivEmployees(){

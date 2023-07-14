@@ -33,7 +33,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 import static io.restassured.RestAssured.get;
 import static org.assertj.core.api.Assertions.assertThat;
-
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 //@RunWith(SpringRunner.class)
@@ -63,11 +64,21 @@ public class MockTestCorrect {
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.get("/employees/list").header("List","Employee"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.size()", Matchers.is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Leanne"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].email").value("Sincere@april.biz"));
     }
+
+//    @Test
+//    void shuouldReturnEmpoloyee(){
+//        mockMvc.perform(MockMvcRequestBuilders.get("/employees/list")
+//                .param("id", String.valueOf(1))
+//                .param("id",2))
+//                .andDo(print())
+//                .andExpect(status().isOk());
+//    }
+
 
 
 

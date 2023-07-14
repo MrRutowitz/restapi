@@ -1,14 +1,21 @@
 package com.taskone.restapi.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.taskone.restapi.model.Employee;
 import com.taskone.restapi.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.yaml.snakeyaml.emitter.ScalarAnalysis;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Scanner;
 
 
 @RequiredArgsConstructor //tworzy konstruktory
@@ -16,22 +23,70 @@ import java.util.Optional;
 @RequestMapping("/employees")
 public class EmployeeController {
 
+
+    private static final String JSON_FILE_PATH = "/json/empolyees.json";
+
     private final EmployeeService employeeService;
 
 
 
+    @GetMapping("/")
+    public String welcome(String name) {
+        return employeeService.welcomeMessage(name);
+    }
+
 
     @GetMapping("/list")
-    public List<Employee> list(){
-
+    public List<Employee> list() {
         return employeeService.list();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getDetails(@PathVariable("id") Integer id)
-    {
-        return  ResponseEntity.ok(employeeService.details(id));
+    public ResponseEntity<Employee> getDetails(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(employeeService.findById(id));
     }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable int id) {
+        employeeService.deleteById(id);
+        return "Employee #" + id + " is deleted!";
+    }
+
+    @GetMapping("/time")
+    public String time() {
+        return employeeService.dateFormat(LocalDate.now());
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<String> addEmpolyee(@RequestBody Employee employee) {
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            File file = new File(JSON_FILE_PATH);
+            List<Employee> employees = new ArrayList<>();
+
+            if (file.exists()) {
+                employees = objectMapper.readValue(file, objectMapper.getTypeFactory().constructCollectionType(List.class, Employee.class));
+            }
+            Employee employee1 = new Employee(employee.getId(), employee.getName(), employee.getUsername(), employee.email, employee.jobposition, employee.salary);
+
+
+
+            employees.add(employee1);
+            objectMapper.writeValue(file, employees); //zapisuje do pliku json
+            return ResponseEntity.ok("Record added");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
+        }
+
+
+    }
+}
+
+
+
+
 
 
 
@@ -85,7 +140,7 @@ public class EmployeeController {
 
 
 
-    }
+
 
 
 

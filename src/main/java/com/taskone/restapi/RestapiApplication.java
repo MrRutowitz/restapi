@@ -38,6 +38,10 @@ public class RestapiApplication {
 				try {
 					List<Employee> employees = mapper.readValue(inputStream,typeReference);
 					employeeService.save(employees);
+
+					Employee employee = new Employee(11,"Jan","JanKowlaski","jank@gmail.com","Backend",11111);
+					employeeService.save(employee);
+
 					System.out.println("---------------------Employees saved-------------------------------");
 				} catch (IOException e){
 					System.out.println("Employees cannot be saved " + e.getMessage());

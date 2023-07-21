@@ -6,6 +6,7 @@ import com.taskone.restapi.repository.EmployeeRepository;
 import com.taskone.restapi.model.Employee;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -17,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Builder
 @Service
 public class EmployeeService {
 
@@ -41,13 +42,13 @@ public class EmployeeService {
         return new EmployeeResponse(savedEmployee.getId(), savedEmployee.getName(), savedEmployee.getUsername(), savedEmployee.getEmail(), savedEmployee.getJobposition(), savedEmployee.getSalary());
     }
 
-    public ResponseEntity<List<EmployeeResponse>> getAllEmployees() {
+    public List<EmployeeResponse> getAllEmployees() {
         List<Employee> employees = employeeRepository.findAll();
         List<EmployeeResponse> employeeResponses = new ArrayList<>();
         for (Employee employee : employees) {
             employeeResponses.add(new EmployeeResponse(employee.getId(), employee.getName(), employee.getUsername(), employee.getEmail(), employee.getJobposition(), employee.getSalary()));
         }
-        return new ResponseEntity<>(employeeResponses, HttpStatus.OK);
+        return employeeResponses;
     }
 
     public EmployeeResponse getEmployeeById(Integer id) {
@@ -80,20 +81,11 @@ public class EmployeeService {
         else {
             return null;
         }
-
     }
-
-
-
-//    public void deleteById(Integer id){
-//        employeeRepository.deleteById(id);
-//    }
-
 
     public String dateFormat(LocalDate date){
         return date.format(dateTimeFormatter);
     }
-
 
     public String welcomeMessage(String name)
     {

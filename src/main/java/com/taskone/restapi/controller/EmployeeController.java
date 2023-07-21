@@ -1,7 +1,5 @@
 package com.taskone.restapi.controller;
 
-
-import com.taskone.restapi.model.Employee;
 import com.taskone.restapi.model.EmployeeRequest;
 import com.taskone.restapi.model.EmployeeResponse;
 import com.taskone.restapi.service.EmployeeService;
@@ -12,25 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-
-
-//1. Rozdziel model bazodanowy od modelu HTTP:
-//        - przygotuj modele request/response dla danych entity
-//        - nie korzystaj z konwersji do stringa przy użyciu objectMapper
-//        2. Dodaj kilka customowych metod do JPA repository w ramach praktyki:
-//        - dodaj wyszukiwanie po zakresie salary <min, max>
-//  - dodaj wyszukiwanie po polu tekstowym z użyciem query LIKE (użyj native query)
-//        3. Dodaj paginację do endpointa z pobieraniem listy
-//        4. Dodać obsługę błędów + walidacje na API
-//        5. Spróbuj wykorzystać adnotację @RequiredArgsConstructor zamiast tworzyć konstruktory z polami
-//        6. Dodaj odczytywanie parametrów z application.properties (np. format czasu)
-//        7. Dodaj aktuator springa dla monitoringu aplikacji
-//        8. Dodaj integration unit-test dla aplikacji
-//        9. Dodaj swaggera
-//        10. Zdockeryzuj aplikację
-
 
 @RequiredArgsConstructor
 @RestController
@@ -45,17 +25,16 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.welcomeMessage(name));
     }
 
-
-    @PostMapping("/create")
+    @PostMapping("/add-employee")
     public ResponseEntity<EmployeeResponse> createEmployee(@RequestBody EmployeeRequest employeeRequest){
         EmployeeResponse employeeResponse = employeeService.createEmployee(employeeRequest);
         return new ResponseEntity<>(employeeResponse,HttpStatus.CREATED);
     }
 
-    @GetMapping("/list")
+    @GetMapping("/list-employees")
     public ResponseEntity<List<EmployeeResponse>> getAllEmployees() {
-        ResponseEntity<List<EmployeeResponse>> responseEntity = employeeService.getAllEmployees();
-        return responseEntity;
+        List<EmployeeResponse> employeeResponses = employeeService.getAllEmployees();
+        return new ResponseEntity<>(employeeResponses,HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -63,7 +42,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 
-    @PostMapping("/update/{id}")
+    @PutMapping("/renovate-employee/{id}")
     public ResponseEntity<EmployeeResponse> updateEmployee(@PathVariable Integer id, @RequestBody EmployeeRequest employeeRequest){
         EmployeeResponse employeeResponse = employeeService.updateEmployee(id,employeeRequest);
         if(employeeResponse != null){
@@ -74,7 +53,7 @@ public class EmployeeController {
         }
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/remove-employee/{id}")
     public ResponseEntity<EmployeeResponse> delete(@PathVariable Integer id) {
         EmployeeResponse employeeResponse = employeeService.deleteEmployeeById(id);
         if(employeeResponse != null){
@@ -85,7 +64,7 @@ public class EmployeeController {
         }
     }
 
-    @GetMapping("/time")
+    @GetMapping("/check-date")
     public ResponseEntity<String> time(){
         return ResponseEntity.ok(employeeService.dateFormat(LocalDate.now()));
     }

@@ -1,12 +1,22 @@
 package com.taskone.restapi.service;
 
+import com.taskone.restapi.model.EmployeeRequest;
+import com.taskone.restapi.model.EmployeeResponse;
 import com.taskone.restapi.repository.EmployeeRepository;
 import com.taskone.restapi.model.Employee;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+
 
 @Service
 public class EmployeeService {
@@ -18,27 +28,67 @@ public class EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 
+    public EmployeeResponse createEmployee(EmployeeRequest employeeRequest) {
+        Employee newEmployee = new Employee();
+        newEmployee.setName(employeeRequest.getName());
+        newEmployee.setUsername(employeeRequest.getUsername());
+        newEmployee.setEmail(employeeRequest.getEmail());
+        newEmployee.setJobposition(employeeRequest.getJobposition());
+        newEmployee.setSalary(employeeRequest.getSalary());
 
-    public List<Employee> list(){
-        return employeeRepository.findAll();
+        Employee savedEmployee = employeeRepository.save(newEmployee);
+
+        return new EmployeeResponse(savedEmployee.getId(), savedEmployee.getName(), savedEmployee.getUsername(), savedEmployee.getEmail(), savedEmployee.getJobposition(), savedEmployee.getSalary());
+    }
+
+    public ResponseEntity<List<EmployeeResponse>> getAllEmployees() {
+        List<Employee> employees = employeeRepository.findAll();
+        List<EmployeeResponse> employeeResponses = new ArrayList<>();
+        for (Employee employee : employees) {
+            employeeResponses.add(new EmployeeResponse(employee.getId(), employee.getName(), employee.getUsername(), employee.getEmail(), employee.getJobposition(), employee.getSalary()));
+        }
+        return new ResponseEntity<>(employeeResponses, HttpStatus.OK);
+    }
+
+    public EmployeeResponse getEmployeeById(Integer id) {
+        Employee findEmployee = employeeRepository.findById(id).orElse(null);
+        return new EmployeeResponse(findEmployee.getId(), findEmployee.getName(), findEmployee.getUsername(), findEmployee.getEmail(), findEmployee.getJobposition(), findEmployee.getSalary());
+    }
+
+    public EmployeeResponse updateEmployee(Integer id, EmployeeRequest updatedEmployee) {  // <-- reponseEmpolyee zwracamy
+        Employee exisitingEmployee = employeeRepository.findById(id).orElse(null);
+        if (exisitingEmployee != null) {
+            exisitingEmployee.setName(updatedEmployee.getName());
+            exisitingEmployee.setUsername(updatedEmployee.getUsername());
+            exisitingEmployee.setEmail(updatedEmployee.getEmail());
+            exisitingEmployee.setJobposition(updatedEmployee.getJobposition());
+            exisitingEmployee.setSalary(updatedEmployee.getSalary());
+            exisitingEmployee = employeeRepository.save(exisitingEmployee);
+
+            return new EmployeeResponse(exisitingEmployee.getId(), exisitingEmployee.getName(), exisitingEmployee.getUsername(), exisitingEmployee.getEmail(), exisitingEmployee.getJobposition(), exisitingEmployee.getSalary());
+        } else {
+            return null;
+        }
+    }
+
+    public EmployeeResponse deleteEmployeeById(Integer id) {
+        Employee findEmployee = employeeRepository.findById(id).orElse(null);
+        if(findEmployee != null){
+            employeeRepository.delete(findEmployee);
+            return new EmployeeResponse(findEmployee.getId(),findEmployee.getName(),findEmployee.getUsername(),findEmployee.getEmail(),findEmployee.getJobposition(),findEmployee.getSalary());
+        }
+        else {
+            return null;
+        }
+
     }
 
 
-    public void save(List<Employee> employees){ employeeRepository.saveAll(employees);}
 
-    public Employee save(Employee employee)
-    {
-        return employeeRepository.save(employee);
-    }
+//    public void deleteById(Integer id){
+//        employeeRepository.deleteById(id);
+//    }
 
-    public Employee findById(Integer id){
-
-        return employeeRepository.findById(id).orElse(null);
-    }
-
-    public void deleteById(Integer id){
-        employeeRepository.deleteById(id);
-    }
 
     public String dateFormat(LocalDate date){
         return date.format(dateTimeFormatter);
@@ -49,6 +99,8 @@ public class EmployeeService {
     {
         return String.format("Welcome", name);
     }
+
+
 
 
 

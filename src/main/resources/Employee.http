@@ -1,0 +1,11 @@
+POST http://localhost:8082/employees/create
+Content-Type: application/json
+
+{
+"id": 13,
+"name": "Ela",
+"username": "Kowalczyk",
+"email": "ela.kow@gmail.com",
+"jobposition": "HR",
+"salary": 8000
+}

@@ -1,86 +1,93 @@
 package com.taskone.restapi.controller;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.taskone.restapi.model.Employee;
+import com.taskone.restapi.model.EmployeeRequest;
+import com.taskone.restapi.model.EmployeeResponse;
 import com.taskone.restapi.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
-import org.yaml.snakeyaml.emitter.ScalarAnalysis;
 
-import java.io.File;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 
-@RequiredArgsConstructor //tworzy konstruktory
+//1. Rozdziel model bazodanowy od modelu HTTP:
+//        - przygotuj modele request/response dla danych entity
+//        - nie korzystaj z konwersji do stringa przy użyciu objectMapper
+//        2. Dodaj kilka customowych metod do JPA repository w ramach praktyki:
+//        - dodaj wyszukiwanie po zakresie salary <min, max>
+//  - dodaj wyszukiwanie po polu tekstowym z użyciem query LIKE (użyj native query)
+//        3. Dodaj paginację do endpointa z pobieraniem listy
+//        4. Dodać obsługę błędów + walidacje na API
+//        5. Spróbuj wykorzystać adnotację @RequiredArgsConstructor zamiast tworzyć konstruktory z polami
+//        6. Dodaj odczytywanie parametrów z application.properties (np. format czasu)
+//        7. Dodaj aktuator springa dla monitoringu aplikacji
+//        8. Dodaj integration unit-test dla aplikacji
+//        9. Dodaj swaggera
+//        10. Zdockeryzuj aplikację
+
+
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/employees")
+@Service
 public class EmployeeController {
-
-
-    private static final String JSON_FILE_PATH = "/json/empolyees.json";
 
     private final EmployeeService employeeService;
 
-
-
     @GetMapping("/")
-    public String welcome(String name) {
-        return employeeService.welcomeMessage(name);
+    public ResponseEntity<String> welcome(String name) {
+        return ResponseEntity.ok(employeeService.welcomeMessage(name));
     }
 
 
+    @PostMapping("/create")
+    public ResponseEntity<EmployeeResponse> createEmployee(@RequestBody EmployeeRequest employeeRequest){
+        EmployeeResponse employeeResponse = employeeService.createEmployee(employeeRequest);
+        return new ResponseEntity<>(employeeResponse,HttpStatus.CREATED);
+    }
+
     @GetMapping("/list")
-    public List<Employee> list() {
-        return employeeService.list();
+    public ResponseEntity<List<EmployeeResponse>> getAllEmployees() {
+        ResponseEntity<List<EmployeeResponse>> responseEntity = employeeService.getAllEmployees();
+        return responseEntity;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getDetails(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok(employeeService.findById(id));
+    public ResponseEntity<EmployeeResponse> getDetails(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(employeeService.getEmployeeById(id));
+    }
+
+    @PostMapping("/update/{id}")
+    public ResponseEntity<EmployeeResponse> updateEmployee(@PathVariable Integer id, @RequestBody EmployeeRequest employeeRequest){
+        EmployeeResponse employeeResponse = employeeService.updateEmployee(id,employeeRequest);
+        if(employeeResponse != null){
+            return new ResponseEntity<>(employeeResponse,HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable int id) {
-        employeeService.deleteById(id);
-        return "Employee #" + id + " is deleted!";
+    public ResponseEntity<EmployeeResponse> delete(@PathVariable Integer id) {
+        EmployeeResponse employeeResponse = employeeService.deleteEmployeeById(id);
+        if(employeeResponse != null){
+            return new ResponseEntity<>(employeeResponse,HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/time")
-    public String time() {
-        return employeeService.dateFormat(LocalDate.now());
-    }
-
-    @PostMapping("/add")
-    public ResponseEntity<String> addEmpolyee(@RequestBody Employee employee) {
-
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            File file = new File(JSON_FILE_PATH);
-            List<Employee> employees = new ArrayList<>();
-
-            if (file.exists()) {
-                employees = objectMapper.readValue(file, objectMapper.getTypeFactory().constructCollectionType(List.class, Employee.class));
-            }
-            Employee employee1 = new Employee(employee.getId(), employee.getName(), employee.getUsername(), employee.email, employee.jobposition, employee.salary);
-
-
-
-            employees.add(employee1);
-            objectMapper.writeValue(file, employees); //zapisuje do pliku json
-            return ResponseEntity.ok("Record added");
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
-        }
-
-
+    public ResponseEntity<String> time(){
+        return ResponseEntity.ok(employeeService.dateFormat(LocalDate.now()));
     }
 }
 
@@ -91,27 +98,6 @@ public class EmployeeController {
 
 
 
-//
-//    public EmployeeController(EmployeeRepository employeeRepository) {
-//        this.employeeRepository = employeeRepository;
-//    }
-//
-//    @GetMapping("/employee")
-//    public ResponseEntity<List<Employee>> listEmployess() //konterner na moj response
-//    {
-//        return ResponseEntity.ok(List.of(Employee.builder().id(1).firstName("Michal").lastName("Rutowicz").build()));
-//    }
-//
-//    @GetMapping("/employees")
-//    public List<Employee> listAll(){
-//        return employeeRepository.findAll();
-//    }
-//
-//    @GetMapping("/addemployee")
-//    public List<Employee> addEmployee(){
-//         employeeRepository.save(employee);
-//        return null;
-//    }
 
 
 
@@ -123,15 +109,6 @@ public class EmployeeController {
 
 
 
-
-
-
-
-
-//    @GetMapping("/addemployee")
-//    public ResponseEntity<List<Employee>> addEmployee(){
-//        Employee employee = new Employee("Michal", "Rutowicz");
-//        ResponseEntity.ok(List.of(E))
 
 
 

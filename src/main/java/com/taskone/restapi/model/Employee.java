@@ -16,20 +16,15 @@ import lombok.NoArgsConstructor;
 @Data
 public class Employee {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public long id;
+    private long id;
 
-    public String name;
-    public String username;
-    public String email;
-    public String jobposition;
-    public Integer salary;
-
-
-
-
+    private String name;
+    private String username;
+    private String email;
+    private String jobposition;
+    private Integer salary;
 
 
 }

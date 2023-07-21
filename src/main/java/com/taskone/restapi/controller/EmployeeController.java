@@ -32,9 +32,9 @@ public class EmployeeController {
     }
 
     @GetMapping("/list-employees")
-    public ResponseEntity<List<EmployeeResponse>> getAllEmployees() {
+    public List<EmployeeResponse> getAllEmployees() {
         List<EmployeeResponse> employeeResponses = employeeService.getAllEmployees();
-        return new ResponseEntity<>(employeeResponses,HttpStatus.OK);
+        return employeeResponses;
     }
 
     @GetMapping("/{id}")

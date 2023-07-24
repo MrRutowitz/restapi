@@ -1,6 +1,7 @@
 package com.taskone.restapi.controller;
 
 import com.taskone.restapi.model.Employee;
+import com.taskone.restapi.model.EmployeeRequest;
 import com.taskone.restapi.service.EmployeeService;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.core.Is;
@@ -32,29 +33,20 @@ class EmployeeControllerTest {
     private EmployeeController employeeController = new EmployeeController(employeeService);
 
     @Test
-    void shouldWelcomeEmployee(){
-        EmployeeService employeeService = Mockito.mock(EmployeeService.class);
-        when(employeeService.welcomeMessage("Michal")).thenReturn("Welcome Michal!");
+    void shouldAddNewEmployee() {
+        //given
+        final var employee = new Employee(13, "name", "username", "email", "jobpostion", 1000);
+        //when
+        final var result = employeeController.createEmployee(new EmployeeRequest("name", "username", "email", "jobposition", 1000.0));
+        //then
+        Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
-        EmployeeController employeeController = new EmployeeController(employeeService);
-        assertEquals("Welcome Michal!", employeeController.welcome("Michal"));
+
     }
 
 //    @Test
-//    void shouldAddNewEmployee(){
-//        //given
-//        final var employee = new Employee(13,"name","username","email","jobpostion",1000);
-//        //when
-//        final var result = employeeController.addEmpolyee(employee);
-//        //then
-//        Assertions.assertThat(result).isNotNull();
-//        Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-//
-//
-//    }
-//    @Test
-//    void shouldUpdateExistingEmployee()
-//    {
+//    void shouldUpdateExistingEmployee() {
 //        //given toDo mockitowhen
 //        final int id = 1;
 //        final String name = "Michal";
@@ -66,7 +58,7 @@ class EmployeeControllerTest {
 //
 //        final var employee = Employee.builder().id(id).name(name).username(username).build();
 //        //when
-//        final ResponseEntity<Employee> result = employeeController.updateEmployee(id,employee);
+//        final ResponseEntity<Employee> result = employeeController.updateEmployee(10,new EmployeeRequest("name", "username", "email", "jobposition", 1000.0));
 //        //then
 //        Assertions.assertThat(result).isNotNull();
 //        final var resultEmployee = result.getBody();
@@ -76,10 +68,5 @@ class EmployeeControllerTest {
 //        Assertions.assertThat(resultEmployee.getName()).isEqualTo(name);
 //        Assertions.assertThat(resultEmployee.getUsername()).isEqualTo(username);
 //
-//
-//
-//
 //    }
-
-
 }

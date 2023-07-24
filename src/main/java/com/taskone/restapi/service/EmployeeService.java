@@ -51,13 +51,13 @@ public class EmployeeService {
         return employeeResponses;
     }
 
-    public EmployeeResponse getEmployeeById(Integer id) {
+    public EmployeeResponse getEmployeeById(Long id) {
         Employee findEmployee = employeeRepository.findById(id).orElse(null);
         return new EmployeeResponse(findEmployee.getId(), findEmployee.getName(), findEmployee.getUsername(), findEmployee.getEmail(), findEmployee.getJobposition(), findEmployee.getSalary());
     }
 
 
-    public EmployeeResponse updateEmployee(Integer id, EmployeeRequest updatedEmployee) {  // <-- reponseEmpolyee zwracamy
+    public EmployeeResponse updateEmployee(Long id, EmployeeRequest updatedEmployee) {
         Employee exisitingEmployee = employeeRepository.findById(id).orElse(null);
         if (exisitingEmployee != null) {
             exisitingEmployee.setName(updatedEmployee.getName());
@@ -73,7 +73,7 @@ public class EmployeeService {
         }
     }
 
-    public EmployeeResponse deleteEmployeeById(Integer id) {
+    public EmployeeResponse deleteEmployeeById(Long id) {
         Employee findEmployee = employeeRepository.findById(id).orElse(null);
         if(findEmployee != null){
             employeeRepository.delete(findEmployee);

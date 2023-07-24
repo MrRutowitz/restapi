@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
     - rafactored endpoints accroding to REST principles
+    -Separated database model from HTTP model
 
 ### Removed
     - removed old JUnit dependency

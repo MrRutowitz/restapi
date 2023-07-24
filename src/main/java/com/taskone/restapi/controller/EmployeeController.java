@@ -20,18 +20,13 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
 
-    @GetMapping("/")
-    public ResponseEntity<String> welcome(String name) {
-        return ResponseEntity.ok(employeeService.welcomeMessage(name));
-    }
-
-    @PostMapping("/add-employee")
+    @PostMapping("/")
     public ResponseEntity<EmployeeResponse> createEmployee(@RequestBody EmployeeRequest employeeRequest){
         EmployeeResponse employeeResponse = employeeService.createEmployee(employeeRequest);
         return new ResponseEntity<>(employeeResponse,HttpStatus.CREATED);
     }
 
-    @GetMapping("/list-employees")
+    @GetMapping("/")
     public List<EmployeeResponse> getAllEmployees() {
         List<EmployeeResponse> employeeResponses = employeeService.getAllEmployees();
         return employeeResponses;
@@ -42,7 +37,8 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 
-    @PutMapping("/renovate-employee/{id}")
+
+    @PutMapping("/{id}")
     public ResponseEntity<EmployeeResponse> updateEmployee(@PathVariable Integer id, @RequestBody EmployeeRequest employeeRequest){
         EmployeeResponse employeeResponse = employeeService.updateEmployee(id,employeeRequest);
         if(employeeResponse != null){
@@ -53,8 +49,8 @@ public class EmployeeController {
         }
     }
 
-    @GetMapping("/remove-employee/{id}")
-    public ResponseEntity<EmployeeResponse> delete(@PathVariable Integer id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<EmployeeResponse> deleteEmployee(@PathVariable Integer id) {
         EmployeeResponse employeeResponse = employeeService.deleteEmployeeById(id);
         if(employeeResponse != null){
             return new ResponseEntity<>(employeeResponse,HttpStatus.OK);
@@ -64,7 +60,7 @@ public class EmployeeController {
         }
     }
 
-    @GetMapping("/check-date")
+    @GetMapping("/time")
     public ResponseEntity<String> time(){
         return ResponseEntity.ok(employeeService.dateFormat(LocalDate.now()));
     }

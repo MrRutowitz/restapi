@@ -56,6 +56,7 @@ public class EmployeeService {
         return new EmployeeResponse(findEmployee.getId(), findEmployee.getName(), findEmployee.getUsername(), findEmployee.getEmail(), findEmployee.getJobposition(), findEmployee.getSalary());
     }
 
+
     public EmployeeResponse updateEmployee(Integer id, EmployeeRequest updatedEmployee) {  // <-- reponseEmpolyee zwracamy
         Employee exisitingEmployee = employeeRepository.findById(id).orElse(null);
         if (exisitingEmployee != null) {

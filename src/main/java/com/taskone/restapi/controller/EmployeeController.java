@@ -1,86 +1,68 @@
 package com.taskone.restapi.controller;
 
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.taskone.restapi.model.Employee;
+import com.taskone.restapi.model.EmployeeRequest;
+import com.taskone.restapi.model.EmployeeResponse;
 import com.taskone.restapi.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
-import org.yaml.snakeyaml.emitter.ScalarAnalysis;
 
-import java.io.File;
-import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-
-@RequiredArgsConstructor //tworzy konstruktory
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/employees")
+@Service
 public class EmployeeController {
-
-
-    private static final String JSON_FILE_PATH = "/json/empolyees.json";
 
     private final EmployeeService employeeService;
 
-
-
-    @GetMapping("/")
-    public String welcome(String name) {
-        return employeeService.welcomeMessage(name);
+    @PostMapping("/")
+    public ResponseEntity<EmployeeResponse> createEmployee(@RequestBody EmployeeRequest employeeRequest){
+        EmployeeResponse employeeResponse = employeeService.createEmployee(employeeRequest);
+        return new ResponseEntity<>(employeeResponse,HttpStatus.CREATED);
     }
 
-
-    @GetMapping("/list")
-    public List<Employee> list() {
-        return employeeService.list();
+    @GetMapping("/")
+    public List<EmployeeResponse> getAllEmployees() {
+        List<EmployeeResponse> employeeResponses = employeeService.getAllEmployees();
+        return employeeResponses;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getDetails(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok(employeeService.findById(id));
+    public ResponseEntity<EmployeeResponse> getDetails(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable int id) {
-        employeeService.deleteById(id);
-        return "Employee #" + id + " is deleted!";
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EmployeeResponse> updateEmployee(@PathVariable Long id, @RequestBody EmployeeRequest employeeRequest){
+        EmployeeResponse employeeResponse = employeeService.updateEmployee(id,employeeRequest);
+        if(employeeResponse != null){
+            return new ResponseEntity<>(employeeResponse,HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<EmployeeResponse> deleteEmployee(@PathVariable Long id) {
+        EmployeeResponse employeeResponse = employeeService.deleteEmployeeById(id);
+        if(employeeResponse != null){
+            return new ResponseEntity<>(employeeResponse,HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/time")
-    public String time() {
-        return employeeService.dateFormat(LocalDate.now());
-    }
-
-    @PostMapping("/add")
-    public ResponseEntity<String> addEmpolyee(@RequestBody Employee employee) {
-
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            File file = new File(JSON_FILE_PATH);
-            List<Employee> employees = new ArrayList<>();
-
-            if (file.exists()) {
-                employees = objectMapper.readValue(file, objectMapper.getTypeFactory().constructCollectionType(List.class, Employee.class));
-            }
-            Employee employee1 = new Employee(employee.getId(), employee.getName(), employee.getUsername(), employee.email, employee.jobposition, employee.salary);
-
-
-
-            employees.add(employee1);
-            objectMapper.writeValue(file, employees); //zapisuje do pliku json
-            return ResponseEntity.ok("Record added");
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
-        }
-
-
+    public ResponseEntity<String> time(){
+        return ResponseEntity.ok(employeeService.dateFormat(LocalDate.now()));
     }
 }
 
@@ -91,27 +73,6 @@ public class EmployeeController {
 
 
 
-//
-//    public EmployeeController(EmployeeRepository employeeRepository) {
-//        this.employeeRepository = employeeRepository;
-//    }
-//
-//    @GetMapping("/employee")
-//    public ResponseEntity<List<Employee>> listEmployess() //konterner na moj response
-//    {
-//        return ResponseEntity.ok(List.of(Employee.builder().id(1).firstName("Michal").lastName("Rutowicz").build()));
-//    }
-//
-//    @GetMapping("/employees")
-//    public List<Employee> listAll(){
-//        return employeeRepository.findAll();
-//    }
-//
-//    @GetMapping("/addemployee")
-//    public List<Employee> addEmployee(){
-//         employeeRepository.save(employee);
-//        return null;
-//    }
 
 
 
@@ -123,15 +84,6 @@ public class EmployeeController {
 
 
 
-
-
-
-
-
-//    @GetMapping("/addemployee")
-//    public ResponseEntity<List<Employee>> addEmployee(){
-//        Employee employee = new Employee("Michal", "Rutowicz");
-//        ResponseEntity.ok(List.of(E))
 
 
 

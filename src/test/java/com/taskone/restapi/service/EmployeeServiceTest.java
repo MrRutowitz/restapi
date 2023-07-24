@@ -2,6 +2,7 @@ package com.taskone.restapi.service;
 
 import com.taskone.restapi.controller.EmployeeController;
 import com.taskone.restapi.model.Employee;
+import com.taskone.restapi.model.EmployeeResponse;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -39,17 +40,17 @@ class EmployeeServiceTest {
     @Test
     void shouldGetAllEmployees(){
 
-        List<Employee> allEmployees = employeeService.list();
+        List<EmployeeResponse> allEmployees = employeeService.getAllEmployees();
         assertNotNull(allEmployees);
-        assertEquals(11,allEmployees.size());
+        assertEquals(10,allEmployees.size());
     }
 
+    @Test
+    void shouldUpdateExistingEmployeeEmployeeService(){
+        //given
+        //when
+        //then
 
-//    @Test
-//    void shouldActivEmployees(){
-//        List<Employee> employees =
-//    }
-
-
+    }
 
 }

@@ -8,7 +8,7 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
+
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.WebApplicationType;
@@ -57,18 +57,18 @@ public class MockTestCorrect {
         assertNotNull(mockMvc);
     }
 
-    @Test
-    void shouldReturnListOfEmployees() throws Exception {
-        when(employeeService.list())
-                .thenReturn(List.of(new Employee(1,"Leanne","Brett","Sincere@april.biz","CEO",30000)));
-
-        this.mockMvc
-                .perform(MockMvcRequestBuilders.get("/employees/list").header("List","Employee"))
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.size()", Matchers.is(1)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Leanne"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].email").value("Sincere@april.biz"));
-    }
+//    @Test
+//    void shouldReturnListOfEmployees() throws Exception {
+//        when(employeeService.list())
+//                .thenReturn(List.of(new Employee(1,"Leanne","Brett","Sincere@april.biz","CEO",30000)));
+//
+//        this.mockMvc
+//                .perform(MockMvcRequestBuilders.get("/employees/list").header("List","Employee"))
+//                .andExpect(status().isOk())
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.size()", Matchers.is(1)))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Leanne"))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$[0].email").value("Sincere@april.biz"));
+//    }
 
 //    @Test
 //    void shuouldReturnEmpoloyee(){

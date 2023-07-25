@@ -1,6 +1,6 @@
 package com.taskone.restapi.service;
 
-import com.taskone.restapi.model.Employee;
+import com.taskone.restapi.entity.Employee;
 import com.taskone.restapi.model.EmployeeRequest;
 import com.taskone.restapi.model.EmployeeResponse;
 import com.taskone.restapi.repository.EmployeeRepository;
@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -71,32 +72,28 @@ public class EmployeeService {
 
     public List<EmployeeResponse> getEmployeesBySalaryRange(double minSalary, double maxSalary) {
         List<Employee> employees = employeeRepository.findBySalaryBetween(minSalary, maxSalary);
-        List<EmployeeResponse> employeeResponses = new ArrayList<>();
-        for (Employee employee : employees) {
-            employeeResponses.add(new EmployeeResponse(
-                    employee.getId(),
-                    employee.getName(),
-                    employee.getUsername(),
-                    employee.getEmail(),
-                    employee.getJobposition(),
-                    employee.getSalary()));
-        }
-        return employeeResponses;
+        return employees.stream()
+                .map(employee -> new EmployeeResponse(
+                        employee.getId(),
+                        employee.getName(),
+                        employee.getUsername(),
+                        employee.getEmail(),
+                        employee.getJobposition(),
+                        employee.getSalary()))
+                .collect(Collectors.toList());
     }
 
     public List<EmployeeResponse> getEmployeesByTitle(String title) {
         List<Employee> employees = employeeRepository.findByTitleOfJobposition(title);
-        List<EmployeeResponse> employeeResponses = new ArrayList<>();
-        for (Employee employee : employees) {
-            employeeResponses.add(new EmployeeResponse(
-                    employee.getId(),
-                    employee.getName(),
-                    employee.getUsername(),
-                    employee.getEmail(),
-                    employee.getJobposition(),
-                    employee.getSalary()));
-        }
-        return employeeResponses;
+        return employees.stream()
+                .map(employee -> new EmployeeResponse(
+                        employee.getId(),
+                        employee.getName(),
+                        employee.getUsername(),
+                        employee.getEmail(),
+                        employee.getJobposition(),
+                        employee.getSalary()))
+                .collect(Collectors.toList());
     }
 
     public EmployeeResponse updateEmployee(Long id, EmployeeRequest updatedEmployee) {

@@ -29,7 +29,7 @@ class EmployeeServiceTest {
     @Test
     void shouldGetAllEmployees() {
 
-        List<EmployeeResponse> allEmployees = employeeService.getAllEmployees(1,3);
+        List<EmployeeResponse> allEmployees = employeeService.getAllEmployees(1, 3);
         assertNotNull(allEmployees);
         assertEquals(3, allEmployees.size());
     }

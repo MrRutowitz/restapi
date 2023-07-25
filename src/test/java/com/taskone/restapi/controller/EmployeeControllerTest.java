@@ -1,6 +1,6 @@
 package com.taskone.restapi.controller;
 
-import com.taskone.restapi.model.Employee;
+import com.taskone.restapi.entity.Employee;
 import com.taskone.restapi.model.EmployeeRequest;
 import com.taskone.restapi.service.EmployeeService;
 import org.assertj.core.api.Assertions;

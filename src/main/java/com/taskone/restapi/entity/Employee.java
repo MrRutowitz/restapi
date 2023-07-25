@@ -1,4 +1,4 @@
-package com.taskone.restapi.model;
+package com.taskone.restapi.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

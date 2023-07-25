@@ -2,7 +2,7 @@ package com.taskone.restapi;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.taskone.restapi.model.Employee;
+import com.taskone.restapi.entity.Employee;
 import com.taskone.restapi.repository.EmployeeRepository;
 import java.io.IOException;
 import java.io.InputStream;

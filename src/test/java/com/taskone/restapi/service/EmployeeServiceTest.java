@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
@@ -29,7 +30,7 @@ class EmployeeServiceTest {
     @Test
     void shouldGetAllEmployees() {
 
-        List<EmployeeResponse> allEmployees = employeeService.getAllEmployees(1, 3);
+        List<EmployeeResponse> allEmployees = employeeService.getAllEmployees(PageRequest.of(1, 3));
         assertNotNull(allEmployees);
         assertEquals(3, allEmployees.size());
     }

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -43,8 +42,7 @@ public class EmployeeService {
                 savedEmployee.getSalary());
     }
 
-    public List<EmployeeResponse> getAllEmployees(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public List<EmployeeResponse> getAllEmployees(Pageable pageable) {
         Page<Employee> employees = employeeRepository.findAll(pageable);
         List<EmployeeResponse> employeeResponses = new ArrayList<>();
         for (Employee employee : employees) {

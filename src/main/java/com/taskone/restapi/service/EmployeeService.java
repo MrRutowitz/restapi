@@ -8,6 +8,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +59,25 @@ public class EmployeeService {
         return new EmployeeResponse(findEmployee.getId(), findEmployee.getName(), findEmployee.getUsername(), findEmployee.getEmail(), findEmployee.getJobposition(), findEmployee.getSalary());
     }
 
+    public List<EmployeeResponse> getEmployeesBySalaryRange(double minSalary, double maxSalary)
+    {
+        List<Employee> employees = employeeRepository.findBySalaryBetween(minSalary,maxSalary);
+        List<EmployeeResponse> employeeResponses = new ArrayList<>();
+        for (Employee employee : employees){
+            employeeResponses.add(new EmployeeResponse(employee.getId(), employee.getName(), employee.getUsername(), employee.getEmail(), employee.getJobposition(), employee.getSalary()));
+        }
+        return employeeResponses;
+    }
+
+
+    public List<EmployeeResponse> getEmployeesByTitle(String title){
+        List<Employee> employees = employeeRepository.findByTitleOfJobposition(title);
+        List<EmployeeResponse> employeeResponses = new ArrayList<>();
+        for (Employee employee : employees){
+            employeeResponses.add(new EmployeeResponse(employee.getId(), employee.getName(), employee.getUsername(), employee.getEmail(), employee.getJobposition(), employee.getSalary()));
+        }
+        return employeeResponses;
+    }
 
     public EmployeeResponse updateEmployee(Long id, EmployeeRequest updatedEmployee) {
         Employee exisitingEmployee = employeeRepository.findById(id).orElse(null);

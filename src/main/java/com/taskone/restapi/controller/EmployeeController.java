@@ -37,6 +37,18 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 
+    @GetMapping("/salary-range")
+    public List<EmployeeResponse> getEmployeesBySalaryRange(@RequestParam double minSalary, @RequestParam double maxSalary) {
+        List<EmployeeResponse> employeeResponses = employeeService.getEmployeesBySalaryRange(minSalary, maxSalary);
+        return employeeResponses;
+    }
+
+
+    @GetMapping("/search-jobposition")
+    public List<EmployeeResponse> searchJobspositionByTitle(@RequestParam String title) {
+        List<EmployeeResponse> employeeResponses = employeeService.getEmployeesByTitle(title);
+        return employeeResponses;
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<EmployeeResponse> updateEmployee(@PathVariable Long id, @RequestBody EmployeeRequest employeeRequest){

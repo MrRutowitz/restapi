@@ -3,14 +3,13 @@ package com.taskone.restapi.controller;
 import com.taskone.restapi.model.EmployeeRequest;
 import com.taskone.restapi.model.EmployeeResponse;
 import com.taskone.restapi.service.EmployeeService;
+import java.time.LocalDate;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -21,14 +20,16 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @PostMapping("/")
-    public ResponseEntity<EmployeeResponse> createEmployee(@RequestBody EmployeeRequest employeeRequest){
+    public ResponseEntity<EmployeeResponse> createEmployee(@RequestBody EmployeeRequest employeeRequest) {
         EmployeeResponse employeeResponse = employeeService.createEmployee(employeeRequest);
-        return new ResponseEntity<>(employeeResponse,HttpStatus.CREATED);
+        return new ResponseEntity<>(employeeResponse, HttpStatus.CREATED);
     }
 
-    @GetMapping("/")
-    public List<EmployeeResponse> getAllEmployees() {
-        List<EmployeeResponse> employeeResponses = employeeService.getAllEmployees();
+    @GetMapping(
+            value = "/",
+            params = {"page", "size"})
+    public List<EmployeeResponse> getAllEmployees(@RequestParam("page") int page, @RequestParam("size") int size) {
+        List<EmployeeResponse> employeeResponses = employeeService.getAllEmployees(page, size);
         return employeeResponses;
     }
 
@@ -38,11 +39,11 @@ public class EmployeeController {
     }
 
     @GetMapping("/salary-range")
-    public List<EmployeeResponse> getEmployeesBySalaryRange(@RequestParam double minSalary, @RequestParam double maxSalary) {
+    public List<EmployeeResponse> getEmployeesBySalaryRange(
+            @RequestParam double minSalary, @RequestParam double maxSalary) {
         List<EmployeeResponse> employeeResponses = employeeService.getEmployeesBySalaryRange(minSalary, maxSalary);
         return employeeResponses;
     }
-
 
     @GetMapping("/search-jobposition")
     public List<EmployeeResponse> searchJobspositionByTitle(@RequestParam String title) {
@@ -51,12 +52,12 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EmployeeResponse> updateEmployee(@PathVariable Long id, @RequestBody EmployeeRequest employeeRequest){
-        EmployeeResponse employeeResponse = employeeService.updateEmployee(id,employeeRequest);
-        if(employeeResponse != null){
-            return new ResponseEntity<>(employeeResponse,HttpStatus.OK);
-        }
-        else{
+    public ResponseEntity<EmployeeResponse> updateEmployee(
+            @PathVariable Long id, @RequestBody EmployeeRequest employeeRequest) {
+        EmployeeResponse employeeResponse = employeeService.updateEmployee(id, employeeRequest);
+        if (employeeResponse != null) {
+            return new ResponseEntity<>(employeeResponse, HttpStatus.OK);
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -64,52 +65,15 @@ public class EmployeeController {
     @DeleteMapping("/{id}")
     public ResponseEntity<EmployeeResponse> deleteEmployee(@PathVariable Long id) {
         EmployeeResponse employeeResponse = employeeService.deleteEmployeeById(id);
-        if(employeeResponse != null){
-            return new ResponseEntity<>(employeeResponse,HttpStatus.OK);
-        }
-        else{
+        if (employeeResponse != null) {
+            return new ResponseEntity<>(employeeResponse, HttpStatus.OK);
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/time")
-    public ResponseEntity<String> time(){
+    public ResponseEntity<String> time() {
         return ResponseEntity.ok(employeeService.dateFormat(LocalDate.now()));
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

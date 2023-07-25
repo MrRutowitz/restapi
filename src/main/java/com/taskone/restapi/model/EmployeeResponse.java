@@ -1,11 +1,6 @@
 package com.taskone.restapi.model;
 
-
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.*;
-
 
 @AllArgsConstructor
 @Getter
@@ -18,6 +13,4 @@ public class EmployeeResponse {
     private String email;
     private String jobposition;
     private double salary;
-
-
 }

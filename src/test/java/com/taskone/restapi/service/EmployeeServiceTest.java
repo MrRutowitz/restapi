@@ -1,24 +1,14 @@
 package com.taskone.restapi.service;
 
-import com.taskone.restapi.controller.EmployeeController;
-import com.taskone.restapi.model.Employee;
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.taskone.restapi.model.EmployeeResponse;
-import io.restassured.RestAssured;
-import org.junit.jupiter.api.Assertions;
+import java.time.LocalDate;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-
-import java.text.DateFormat;
-import java.text.Normalizer;
-import java.time.LocalDate;
-import java.util.List;
-
-import static io.restassured.RestAssured.when;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles(value = "dev")
@@ -26,7 +16,6 @@ class EmployeeServiceTest {
 
     @Autowired
     private EmployeeService employeeService;
-
 
     @Test
     void isYourDataCorrect() {
@@ -38,19 +27,18 @@ class EmployeeServiceTest {
     }
 
     @Test
-    void shouldGetAllEmployees(){
+    void shouldGetAllEmployees() {
 
-        List<EmployeeResponse> allEmployees = employeeService.getAllEmployees();
+        List<EmployeeResponse> allEmployees = employeeService.getAllEmployees(1,3);
         assertNotNull(allEmployees);
-        assertEquals(10,allEmployees.size());
+        assertEquals(3, allEmployees.size());
     }
 
     @Test
-    void shouldUpdateExistingEmployeeEmployeeService(){
-        //given
-        //when
-        //then
+    void shouldUpdateExistingEmployeeEmployeeService() {
+        // given
+        // when
+        // then
 
     }
-
 }

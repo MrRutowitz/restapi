@@ -6,6 +6,7 @@ import com.taskone.restapi.service.EmployeeService;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -25,11 +26,9 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeResponse, HttpStatus.CREATED);
     }
 
-    @GetMapping(
-            value = "/",
-            params = {"page", "size"})
-    public List<EmployeeResponse> getAllEmployees(@RequestParam("page") int page, @RequestParam("size") int size) {
-        List<EmployeeResponse> employeeResponses = employeeService.getAllEmployees(page, size);
+    @GetMapping(value = "/")
+    public List<EmployeeResponse> getAllEmployees(Pageable page) {
+        List<EmployeeResponse> employeeResponses = employeeService.getAllEmployees(page);
         return employeeResponses;
     }
 

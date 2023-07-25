@@ -76,7 +76,31 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
+			<plugin>
+				<groupId>com.diffplug.spotless</groupId>
+				<artifactId>spotless-maven-plugin</artifactId>
+				<version>2.30.0</version>
+				<configuration>
+					<java>
+						<palantirJavaFormat>
+							<version>2.28.0</version>
+						</palantirJavaFormat>
+					</java>
+					<json>
+						<includes>
+							<include>src/**/*.json</include>
+						</includes>
+						<gson>
+							<indentSpaces>2</indentSpaces>
+							<escapeHtml>false</escapeHtml>
+						</gson>
+					</json>
+				</configuration>
+			</plugin>
 		</plugins>
+
+
 	</build>
 
 </project>

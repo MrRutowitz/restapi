@@ -1,6 +1,5 @@
 package com.taskone.restapi.model;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,5 +14,4 @@ public class EmployeeRequest {
     private String email;
     private String jobposition;
     private double salary;
-
 }

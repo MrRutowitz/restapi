@@ -1,9 +1,7 @@
 package com.taskone.restapi.model;
 
-import lombok.*;
-
 import jakarta.validation.constraints.*;
-
+import lombok.*;
 
 @AllArgsConstructor
 @Getter
@@ -16,5 +14,4 @@ public class EmployeeResponse {
     private String email;
     private String jobposition;
     private double salary;
-
 }

@@ -4,28 +4,19 @@ import com.taskone.restapi.entity.Employee;
 import com.taskone.restapi.model.EmployeeRequest;
 import com.taskone.restapi.model.EmployeeResponse;
 import com.taskone.restapi.repository.EmployeeRepository;
+import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
-
-import jakarta.validation.constraints.*;
-
 
 @Service
-
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-
-
 
     public DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 

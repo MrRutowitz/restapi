@@ -3,30 +3,17 @@ package com.taskone.restapi.controller;
 import com.taskone.restapi.model.EmployeeRequest;
 import com.taskone.restapi.model.EmployeeResponse;
 import com.taskone.restapi.service.EmployeeService;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import jakarta.validation.Valid;
+import java.time.LocalDate;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.validation.Validator;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-
 
 @RequiredArgsConstructor
 @RestController
@@ -39,8 +26,8 @@ public class EmployeeController extends RuntimeException {
 
     @PostMapping("/")
     public ResponseEntity<EmployeeResponse> createEmployee(@Valid @RequestBody EmployeeRequest employeeRequest) {
-            EmployeeResponse employeeResponse = employeeService.createEmployee(employeeRequest);
-            return new ResponseEntity<>(employeeResponse, HttpStatus.CREATED);
+        EmployeeResponse employeeResponse = employeeService.createEmployee(employeeRequest);
+        return new ResponseEntity<>(employeeResponse, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/")
@@ -94,8 +81,8 @@ public class EmployeeController extends RuntimeException {
         }
     }
 
-//    @Autowired
-//    private Environment environment;
+    //    @Autowired
+    //    private Environment environment;
 
     @GetMapping("/time")
     public ResponseEntity<String> time() {
@@ -104,17 +91,16 @@ public class EmployeeController extends RuntimeException {
 
     @Value("${spring.mvc.format.date}")
     private String dateFormatt;
-    @GetMapping("/time1")
-    public ResponseEntity<String> time1(){
 
-        return ResponseEntity.ok("Current date: "+dateFormatt);
+    @GetMapping("/time1")
+    public ResponseEntity<String> time1() {
+
+        return ResponseEntity.ok("Current date: " + dateFormatt);
     }
 
-//    @GetMapping("time2")
-//    public ResponseEntity<String> time2(Environment environment){
-//        return ResponseEntity.ok(environment.getProperty())
-//    }
-
-
+    //    @GetMapping("time2")
+    //    public ResponseEntity<String> time2(Environment environment){
+    //        return ResponseEntity.ok(environment.getProperty())
+    //    }
 
 }

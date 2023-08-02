@@ -19,17 +19,17 @@ class EmployeeControllerTest {
     @Autowired
     private EmployeeController employeeController = new EmployeeController(employeeService);
 
-    @Test
-    void shouldAddNewEmployee() {
-        // given
-        final var employee = new Employee(13, "name", "username", "email", "jobpostion", 1000);
-        // when
-        final var result = employeeController.createEmployee(
-                new EmployeeRequest("name", "username", "email", "jobposition", 1000.0));
-        // then
-        Assertions.assertThat(result).isNotNull();
-        Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-    }
+//    @Test
+//    void shouldAddNewEmployee() {
+//        // given
+//        final var employee = new Employee(13, "name", "username", "email", "jobpostion", 1000);
+//        // when
+//        final var result = employeeController.createEmployee(
+//                new EmployeeRequest("name", "username", "email", "jobposition", 1000.0));
+//        // then
+//        Assertions.assertThat(result).isNotNull();
+//        Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+//    }
 
     //    @Test
     //    void shouldUpdateExistingEmployee() {

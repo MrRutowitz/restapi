@@ -1,3 +1,9 @@
 profile:
   property:
     value: TEST
+
+
+management:
+  security:
+    enabled: false
+    port: 9000

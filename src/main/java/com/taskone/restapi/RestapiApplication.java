@@ -11,11 +11,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.validation.Validator;
 
 @SpringBootApplication
 public class RestapiApplication {
 
     public static void main(String[] args) {
+
+
         SpringApplication.run(RestapiApplication.class, args);
     }
 
@@ -23,6 +26,7 @@ public class RestapiApplication {
     CommandLineRunner runner(EmployeeRepository employeeRepository) {
         return args -> {
             ObjectMapper mapper = new ObjectMapper();
+
             TypeReference<List<Employee>> typeReference = new TypeReference<>() {};
             InputStream inputStream = TypeReference.class.getResourceAsStream(
                     "/json/employees.json"); // uzywam strumienia zeby odczytac JSONa

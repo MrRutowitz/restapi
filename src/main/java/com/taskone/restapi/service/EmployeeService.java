@@ -6,17 +6,27 @@ import com.taskone.restapi.model.EmployeeResponse;
 import com.taskone.restapi.repository.EmployeeRepository;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
+
+import jakarta.validation.constraints.*;
+
 
 @Service
+
 public class EmployeeService {
 
-    public EmployeeRepository employeeRepository;
+    private final EmployeeRepository employeeRepository;
+
+
+
     public DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public EmployeeService(EmployeeRepository employeeRepository) {
@@ -24,6 +34,7 @@ public class EmployeeService {
     }
 
     public EmployeeResponse createEmployee(EmployeeRequest employeeRequest) {
+
         Employee newEmployee = new Employee();
         newEmployee.setName(employeeRequest.getName());
         newEmployee.setUsername(employeeRequest.getUsername());
@@ -44,17 +55,15 @@ public class EmployeeService {
 
     public List<EmployeeResponse> getAllEmployees(Pageable pageable) {
         Page<Employee> employees = employeeRepository.findAll(pageable);
-        List<EmployeeResponse> employeeResponses = new ArrayList<>();
-        for (Employee employee : employees) {
-            employeeResponses.add(new EmployeeResponse(
-                    employee.getId(),
-                    employee.getName(),
-                    employee.getUsername(),
-                    employee.getEmail(),
-                    employee.getJobposition(),
-                    employee.getSalary()));
-        }
-        return employeeResponses;
+        return employees.stream()
+                .map(employee -> new EmployeeResponse(
+                        employee.getId(),
+                        employee.getName(),
+                        employee.getUsername(),
+                        employee.getEmail(),
+                        employee.getJobposition(),
+                        employee.getSalary()))
+                .collect(Collectors.toList());
     }
 
     public EmployeeResponse getEmployeeById(Long id) {

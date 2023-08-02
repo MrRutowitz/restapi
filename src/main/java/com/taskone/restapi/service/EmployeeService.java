@@ -5,10 +5,11 @@ import com.taskone.restapi.model.EmployeeRequest;
 import com.taskone.restapi.model.EmployeeResponse;
 import com.taskone.restapi.repository.EmployeeRepository;
 import jakarta.validation.constraints.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -132,8 +133,13 @@ public class EmployeeService {
         }
     }
 
-    public String dateFormat(LocalDate date) {
-        return date.format(dateTimeFormatter);
+    @Value("${date.time.format}")
+    private String timeFormat;
+
+    public String currentTime() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(timeFormat);
+        return now.format(formatter);
     }
 
     public String welcomeMessage(String name) {

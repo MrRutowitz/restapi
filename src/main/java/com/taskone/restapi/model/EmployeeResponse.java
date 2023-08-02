@@ -9,7 +9,7 @@ import lombok.*;
 public class EmployeeResponse {
 
     private long id;
-    public String name;
+    private String name;
     private String username;
     private String email;
     private String jobposition;

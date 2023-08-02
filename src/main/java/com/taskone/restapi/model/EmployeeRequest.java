@@ -13,7 +13,7 @@ public class EmployeeRequest {
 
     @NotNull
     @Size(min = 2, max = 20, message = "Please use 2-20 characters in name")
-    public String name;
+    private String name;
 
     @NotNull
     private String username;

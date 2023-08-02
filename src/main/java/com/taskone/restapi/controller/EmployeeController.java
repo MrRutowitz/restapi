@@ -4,10 +4,8 @@ import com.taskone.restapi.model.EmployeeRequest;
 import com.taskone.restapi.model.EmployeeResponse;
 import com.taskone.restapi.service.EmployeeService;
 import jakarta.validation.Valid;
-import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,13 +36,7 @@ public class EmployeeController extends RuntimeException {
 
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeResponse> getDetails(@PathVariable("id") Long id) {
-        try {
-            return ResponseEntity.ok(employeeService.getEmployeeById(id));
-        } catch (NullPointerException nullPointerException) {
-            nullPointerException.fillInStackTrace();
-            System.out.println("Employee does not exist!");
-            return null;
-        }
+        return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 
     @GetMapping("/salary-range")
@@ -81,26 +73,8 @@ public class EmployeeController extends RuntimeException {
         }
     }
 
-    //    @Autowired
-    //    private Environment environment;
-
     @GetMapping("/time")
     public ResponseEntity<String> time() {
-        return ResponseEntity.ok(employeeService.dateFormat(LocalDate.now()));
+        return new ResponseEntity<>(employeeService.currentTime(), HttpStatus.OK);
     }
-
-    @Value("${spring.mvc.format.date}")
-    private String dateFormatt;
-
-    @GetMapping("/time1")
-    public ResponseEntity<String> time1() {
-
-        return ResponseEntity.ok("Current date: " + dateFormatt);
-    }
-
-    //    @GetMapping("time2")
-    //    public ResponseEntity<String> time2(Environment environment){
-    //        return ResponseEntity.ok(environment.getProperty())
-    //    }
-
 }

@@ -6,8 +6,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 // @RunWith(SpringRunner.class)
 // @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@WebMvcTest(EmployeeController.class)
-@ActiveProfiles(value = "dev")
+//@WebMvcTest(EmployeeController.class)
+//@ActiveProfiles(value = "dev")
 public class MockTestCorrect {
 
     //    @MockBean

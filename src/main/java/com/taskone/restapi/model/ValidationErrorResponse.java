@@ -11,6 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 public class ValidationErrorResponse {
 
+    @Builder.Default
     private List<Violation> violations = new ArrayList<>();
 
     @AllArgsConstructor
@@ -18,7 +19,7 @@ public class ValidationErrorResponse {
     @Setter
     @Builder
     public static class Violation {
-        private String fieldName;
-        private String message;
+        private final String fieldName;
+        private final String message;
     }
 }

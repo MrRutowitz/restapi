@@ -6,7 +6,6 @@ import com.taskone.restapi.entity.Employee;
 import com.taskone.restapi.repository.EmployeeRepository;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.http.HttpClient;
 import java.util.List;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,18 +16,16 @@ import org.springframework.context.annotation.Bean;
 public class RestapiApplication {
 
     public static void main(String[] args) {
-
         SpringApplication.run(RestapiApplication.class, args);
-
     }
+
     @Bean
     CommandLineRunner runner(EmployeeRepository employeeRepository) {
         return args -> {
             ObjectMapper mapper = new ObjectMapper();
 
             TypeReference<List<Employee>> typeReference = new TypeReference<>() {};
-            InputStream inputStream = TypeReference.class.getResourceAsStream(
-                    "/json/employees.json"); // uzywam strumienia zeby odczytac JSONa
+            InputStream inputStream = TypeReference.class.getResourceAsStream("/json/employees.json");
             try {
                 List<Employee> employees = mapper.readValue(inputStream, typeReference);
                 employeeRepository.saveAll(employees);
@@ -39,5 +36,4 @@ public class RestapiApplication {
             }
         };
     }
-
 }

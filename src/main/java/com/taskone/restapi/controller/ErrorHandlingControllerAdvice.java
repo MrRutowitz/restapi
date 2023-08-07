@@ -2,7 +2,6 @@ package com.taskone.restapi.controller;
 
 import com.taskone.restapi.model.EmployeeNotFoundException;
 import com.taskone.restapi.model.ValidationErrorResponse;
-import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -20,13 +19,15 @@ public class ErrorHandlingControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     ValidationErrorResponse onConstraintValidationException(ConstraintViolationException e) {
-        ValidationErrorResponse error = new ValidationErrorResponse();
-        for (ConstraintViolation violation : e.getConstraintViolations()) {
-            error.getViolations()
-                    .add(new ValidationErrorResponse.Violation(
-                            violation.getPropertyPath().toString(), violation.getMessage()));
-        }
-        return error;
+        List<ValidationErrorResponse.Violation> violations = e.getConstraintViolations().stream()
+                .map(constraintViolation -> ValidationErrorResponse.Violation.builder()
+                        .fieldName(constraintViolation.getPropertyPath().toString())
+                        .message(constraintViolation.getMessage())
+                        .build())
+                .toList();
+        ValidationErrorResponse validationErrorResponse =
+                ValidationErrorResponse.builder().violations(violations).build();
+        return new ResponseEntity<>(validationErrorResponse, HttpStatus.BAD_REQUEST).getBody();
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
@@ -40,15 +41,6 @@ public class ErrorHandlingControllerAdvice {
         ValidationErrorResponse response =
                 ValidationErrorResponse.builder().violations(violations).build();
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        //        e.getBindingResult().getFieldErrors().stream().map(fieldError ->
-        // ValidationErrorResponse.Violation.builder()
-        //                .fieldName(fieldError.getField())
-        //                .message(fieldError.getDefaultMessage())
-        //                .build());
-        //        for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
-        //            error.getViolations().add(new Violation(fieldError.getField(), fieldError.getDefaultMessage()));
-        //        }
-        //        return error;
     }
 
     @ExceptionHandler(EmployeeNotFoundException.class)

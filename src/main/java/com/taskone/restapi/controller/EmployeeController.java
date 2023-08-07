@@ -59,15 +59,7 @@ public class EmployeeController {
 
     @GetMapping("/searchByJobposition")
     public List<EmployeeResponse> searchJobspositionByTitle(
-            @Pattern(regexp = "^[A-Za-z]*$", message = "You can not use numbers and characters in jobtitle! ") @RequestParam
-                    String title) {
-        List<EmployeeResponse> employeeResponses = employeeService.getEmployeesByTitle(title);
-        return employeeResponses;
-    }
-    @GetMapping("/searchByName")
-    public List<EmployeeResponse> searchNameByTitle(
-            @Pattern(regexp = "^[A-Za-z]*$", message = "You can not use numbers and characters in jobtitle! ") @RequestParam
-            String title) {
+            @Pattern(regexp = "^[A-Za-z]*$", message = "Use only letters!") @RequestParam String title) {
         List<EmployeeResponse> employeeResponses = employeeService.getEmployeesByTitle(title);
         return employeeResponses;
     }

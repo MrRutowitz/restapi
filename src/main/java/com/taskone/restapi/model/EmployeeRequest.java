@@ -12,14 +12,14 @@ import lombok.Setter;
 public class EmployeeRequest {
 
     @NotNull
-    @Size(min = 2, max = 20, message = "Please use 2-20 characters in name")
-    @Pattern(regexp = "^[A-Za-z]*$", message = "You can not use numbers and characters in name! ")
+    @Size(min = 2, max = 20, message = "Please use 2-20 letters in name")
+    @Pattern(regexp = "^[A-Za-z]*$", message = "Use only letters!")
     private String name;
 
     @NotNull
     private String username;
 
-    @Email(message = "Use @ in email, example xxx@gmail.com")
+    @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}")
     @NotNull
     private String email;
 

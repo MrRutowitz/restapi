@@ -26,14 +26,14 @@ public class EmployeeService {
 
     public EmployeeResponse createEmployee(EmployeeRequest employeeRequest) {
 
-        Employee newEmployee = new Employee();
-        newEmployee.setName(employeeRequest.getName());
-        newEmployee.setUsername(employeeRequest.getUsername());
-        newEmployee.setEmail(employeeRequest.getEmail());
-        newEmployee.setJobposition(employeeRequest.getJobposition());
-        newEmployee.setSalary(employeeRequest.getSalary());
+        Employee employee = Employee.builder()
+                .name(employeeRequest.getName())
+                .username(employeeRequest.getUsername())
+                .email(employeeRequest.getEmail())
+                .jobposition(employeeRequest.getJobposition())
+                .build();
 
-        Employee savedEmployee = employeeRepository.save(newEmployee);
+        Employee savedEmployee = employeeRepository.save(employee);
 
         return new EmployeeResponse(
                 savedEmployee.getId(),
@@ -58,9 +58,7 @@ public class EmployeeService {
     }
 
     public EmployeeResponse getEmployeeById(Long id) {
-        Employee findEmployee = employeeRepository
-                .findById(id)
-                .orElseThrow(() -> new EmployeeNotFoundException(id));
+        Employee findEmployee = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
         return new EmployeeResponse(
                 findEmployee.getId(),
                 findEmployee.getName(),

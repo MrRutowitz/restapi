@@ -56,7 +56,7 @@ public class EmployeeController {
         return employeeResponses;
     }
 
-    @GetMapping("/searchjobposition")
+    @GetMapping("/searchbyjobposition")
     public List<EmployeeResponse> searchJobsPositionByTitle(
             @Pattern(regexp = "^[A-Za-z]*$", message = "Use only letters!") @RequestParam String title) {
         List<EmployeeResponse> employeeResponses = employeeService.getEmployeesByJobPosition(title);

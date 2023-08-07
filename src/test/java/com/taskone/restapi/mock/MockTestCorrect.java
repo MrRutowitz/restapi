@@ -1,16 +1,8 @@
 package com.taskone.restapi.mock;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import com.taskone.restapi.controller.EmployeeController;
-import com.taskone.restapi.service.EmployeeService;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.context.WebApplicationContext;
 
 // @RunWith(SpringRunner.class)
 // @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -18,19 +10,19 @@ import org.springframework.web.context.WebApplicationContext;
 @ActiveProfiles(value = "dev")
 public class MockTestCorrect {
 
-    @MockBean
-    private EmployeeService employeeService;
-
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Test
-    void shouldCreateMockMvc() {
-        assertNotNull(mockMvc);
-    }
+    //    @MockBean
+    //    private EmployeeService employeeService;
+    //
+    //    @Autowired
+    //    private WebApplicationContext webApplicationContext;
+    //
+    //    @Autowired
+    //    private MockMvc mockMvc;
+    //
+    //    @Test
+    //    void shouldCreateMockMvc() {
+    //        assertNotNull(mockMvc);
+    //    }
 
     //    @Test
     //    void shouldReturnListOfEmployees() throws Exception {

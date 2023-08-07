@@ -1,29 +1,28 @@
 package com.taskone.restapi.service;
 
 import com.taskone.restapi.entity.Employee;
+import com.taskone.restapi.model.EmployeeNotFoundException;
 import com.taskone.restapi.model.EmployeeRequest;
 import com.taskone.restapi.model.EmployeeResponse;
 import com.taskone.restapi.repository.EmployeeRepository;
-import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
-    public DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-    public EmployeeService(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
-    }
+    @Value("${date.time.format:yyyy-MM-dd HH:mm:ss}")
+    private String timeFormat;
 
     public EmployeeResponse createEmployee(EmployeeRequest employeeRequest) {
 
@@ -59,7 +58,9 @@ public class EmployeeService {
     }
 
     public EmployeeResponse getEmployeeById(Long id) {
-        Employee findEmployee = employeeRepository.findById(id).orElse(null);
+        Employee findEmployee = employeeRepository
+                .findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee with ID" + id + "not found"));
         return new EmployeeResponse(
                 findEmployee.getId(),
                 findEmployee.getName(),
@@ -132,9 +133,6 @@ public class EmployeeService {
             return null;
         }
     }
-
-    @Value("${date.time.format}")
-    private String timeFormat;
 
     public String currentTime() {
         LocalDateTime now = LocalDateTime.now();

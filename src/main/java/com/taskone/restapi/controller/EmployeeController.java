@@ -4,6 +4,9 @@ import com.taskone.restapi.model.EmployeeRequest;
 import com.taskone.restapi.model.EmployeeResponse;
 import com.taskone.restapi.service.EmployeeService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/employees")
 @Service
 @Validated
-public class EmployeeController extends RuntimeException {
+public class EmployeeController {
 
     private final EmployeeService employeeService;
 
@@ -36,25 +39,42 @@ public class EmployeeController extends RuntimeException {
 
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeResponse> getDetails(@PathVariable("id") Long id) {
+
         return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 
     @GetMapping("/salary-range")
     public List<EmployeeResponse> getEmployeesBySalaryRange(
-            @RequestParam double minSalary, @RequestParam double maxSalary) {
+            @Min(value = 1000, message = "Minimum salary 1000Euro")
+                    @Max(value = 100000, message = "Maksimum 100000")
+                    @RequestParam
+                    double minSalary,
+            @Min(value = 1000, message = "Minimum salary 1000Euro")
+                    @Max(value = 100000, message = "Maksimum 100000")
+                    @RequestParam
+                    double maxSalary) {
         List<EmployeeResponse> employeeResponses = employeeService.getEmployeesBySalaryRange(minSalary, maxSalary);
         return employeeResponses;
     }
 
-    @GetMapping("/search-jobposition")
-    public List<EmployeeResponse> searchJobspositionByTitle(@RequestParam String title) {
+    @GetMapping("/searchByJobposition")
+    public List<EmployeeResponse> searchJobspositionByTitle(
+            @Pattern(regexp = "^[A-Za-z]*$", message = "You can not use numbers and characters in jobtitle! ") @RequestParam
+                    String title) {
+        List<EmployeeResponse> employeeResponses = employeeService.getEmployeesByTitle(title);
+        return employeeResponses;
+    }
+    @GetMapping("/searchByName")
+    public List<EmployeeResponse> searchNameByTitle(
+            @Pattern(regexp = "^[A-Za-z]*$", message = "You can not use numbers and characters in jobtitle! ") @RequestParam
+            String title) {
         List<EmployeeResponse> employeeResponses = employeeService.getEmployeesByTitle(title);
         return employeeResponses;
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<EmployeeResponse> updateEmployee(
-            @PathVariable Long id, @RequestBody EmployeeRequest employeeRequest) {
+            @PathVariable Long id, @Valid @RequestBody EmployeeRequest employeeRequest) {
         EmployeeResponse employeeResponse = employeeService.updateEmployee(id, employeeRequest);
         if (employeeResponse != null) {
             return new ResponseEntity<>(employeeResponse, HttpStatus.OK);

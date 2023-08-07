@@ -1,6 +1,5 @@
 package com.taskone.restapi.model;
 
-import jakarta.validation.constraints.*;
 import lombok.*;
 
 @AllArgsConstructor

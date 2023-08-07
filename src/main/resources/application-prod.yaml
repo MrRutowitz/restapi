@@ -6,3 +6,7 @@ management:
   security:
     enabled: false
     port: 9000
+
+date:
+  time:
+    format: yyyy-MM-dd HH:mm:ss

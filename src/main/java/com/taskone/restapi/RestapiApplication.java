@@ -6,6 +6,7 @@ import com.taskone.restapi.entity.Employee;
 import com.taskone.restapi.repository.EmployeeRepository;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.http.HttpClient;
 import java.util.List;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,8 +19,8 @@ public class RestapiApplication {
     public static void main(String[] args) {
 
         SpringApplication.run(RestapiApplication.class, args);
-    }
 
+    }
     @Bean
     CommandLineRunner runner(EmployeeRepository employeeRepository) {
         return args -> {
@@ -38,4 +39,5 @@ public class RestapiApplication {
             }
         };
     }
+
 }

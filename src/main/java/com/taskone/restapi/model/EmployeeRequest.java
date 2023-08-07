@@ -19,7 +19,7 @@ public class EmployeeRequest {
     @NotNull
     private String username;
 
-    @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}")
+    @Email(message = "Invalid email address!")
     @NotNull
     private String email;
 
@@ -27,8 +27,8 @@ public class EmployeeRequest {
     @Pattern(regexp = "^[A-Za-z]*$", message = "Please use only letters!")
     private String jobposition;
 
-    @Min(value = 1000, message = "Minimum salary 1000Euro")
-    @Max(value = 100000, message = "Maksimum 100000")
+    @Min(value = 1000, message = "Minimum salary 1000$")
+    @Max(value = 100000, message = "Maximum salary 100000$")
     @NotNull
     private Double salary;
 }

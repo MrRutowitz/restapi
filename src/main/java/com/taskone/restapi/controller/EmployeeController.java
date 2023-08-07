@@ -39,25 +39,24 @@ public class EmployeeController {
 
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeResponse> getDetails(@PathVariable("id") Long id) {
-
         return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 
-    @GetMapping("/salary-range")
+    @GetMapping("/salaryrange")
     public List<EmployeeResponse> getEmployeesBySalaryRange(
-            @Min(value = 1000, message = "Minimum salary 1000Euro")
-                    @Max(value = 100000, message = "Maksimum 100000")
+            @Min(value = 1000, message = "Minimum salary 1000$")
+                    @Max(value = 100000, message = "Maximum salary 100000$")
                     @RequestParam
                     double minSalary,
-            @Min(value = 1000, message = "Minimum salary 1000Euro")
-                    @Max(value = 100000, message = "Maksimum 100000")
+            @Min(value = 1000, message = "Minimum salary 1000$")
+                    @Max(value = 100000, message = "Maximum 100000$")
                     @RequestParam
                     double maxSalary) {
         List<EmployeeResponse> employeeResponses = employeeService.getEmployeesBySalaryRange(minSalary, maxSalary);
         return employeeResponses;
     }
 
-    @GetMapping("/searchByJobposition")
+    @GetMapping("/searchjobposition")
     public List<EmployeeResponse> searchJobsPositionByTitle(
             @Pattern(regexp = "^[A-Za-z]*$", message = "Use only letters!") @RequestParam String title) {
         List<EmployeeResponse> employeeResponses = employeeService.getEmployeesByJobPosition(title);

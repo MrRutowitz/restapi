@@ -17,21 +17,17 @@ class EmployeeServiceTest {
     @Autowired
     private EmployeeService employeeService;
 
-    //    @Test
-    //    void isYourDataCorrect() {
-    //        LocalDate date = LocalDate.of(2023, 07, 11);
-    //
-    //        String dateString = employeeService.dateFormat(date);
-    //
-    //        assertEquals("2023-07-11", dateString);
-    //    }
+    @Test
+    void isYourDateCorrect() {
+        String dateString = employeeService.currentTime();
+        assertEquals("2023-08-08", dateString);
+    }
 
     @Test
     void shouldGetAllEmployees() {
-
-        List<EmployeeResponse> allEmployees = employeeService.getAllEmployees(PageRequest.of(1, 3));
+        List<EmployeeResponse> allEmployees = employeeService.getAllEmployees(PageRequest.of(0, 10));
         assertNotNull(allEmployees);
-        assertEquals(3, allEmployees.size());
+        assertEquals(10, allEmployees.size());
     }
 
     @Test
@@ -39,6 +35,5 @@ class EmployeeServiceTest {
         // given
         // when
         // then
-
     }
 }

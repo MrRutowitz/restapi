@@ -5,7 +5,7 @@ Content-Type: application/json
 "id": 13,
 "name": "Michal",
 "username": "Kowalczyk",
-"email": "abcxy@gmail.aaa",
+"email": "abcxy@gmail",
 "jobposition": "HR",
 "salary": 9000
 }

@@ -21,7 +21,7 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
-    @Value("${date.time.format:yyyy-MM-dd HH:mm:ss}")
+    @Value("${date.time.format:yyyy-MM-dd}")
     private String timeFormat;
 
     public EmployeeResponse createEmployee(EmployeeRequest employeeRequest) {
@@ -58,7 +58,8 @@ public class EmployeeService {
     }
 
     public EmployeeResponse getEmployeeById(Long id) {
-        Employee findEmployee = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
+        Employee findEmployee =
+                employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(String.valueOf(id)));
         return new EmployeeResponse(
                 findEmployee.getId(),
                 findEmployee.getName(),
@@ -95,7 +96,8 @@ public class EmployeeService {
     }
 
     public EmployeeResponse updateEmployee(Long id, EmployeeRequest updatedEmployee) {
-        Employee exisitingEmployee = employeeRepository.findById(id).orElse(null);
+        Employee exisitingEmployee =
+                employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(String.valueOf(id)));
         if (exisitingEmployee != null) {
             exisitingEmployee.setName(updatedEmployee.getName());
             exisitingEmployee.setUsername(updatedEmployee.getUsername());

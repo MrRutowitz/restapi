@@ -18,7 +18,6 @@ public class ValidationErrorResponse {
     @Setter
     @Builder
     public static class Violation {
-
         private String fieldName;
         private String message;
     }

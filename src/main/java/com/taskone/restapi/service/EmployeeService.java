@@ -81,8 +81,8 @@ public class EmployeeService {
                 .collect(Collectors.toList());
     }
 
-    public List<EmployeeResponse> getEmployeesByTitle(String title) {
-        List<Employee> employees = employeeRepository.findByTitleOfJobposition(title);
+    public List<EmployeeResponse> getEmployeesByJobPosition(String title) {
+        List<Employee> employees = employeeRepository.findByTitleOfJobPosition(title);
         return employees.stream()
                 .map(employee -> new EmployeeResponse(
                         employee.getId(),

@@ -60,7 +60,7 @@ public class EmployeeService {
     public EmployeeResponse getEmployeeById(Long id) {
         Employee findEmployee = employeeRepository
                 .findById(id)
-                .orElseThrow(() -> new EmployeeNotFoundException("Employee with ID" + id + "not found"));
+                .orElseThrow(() -> new EmployeeNotFoundException(id));
         return new EmployeeResponse(
                 findEmployee.getId(),
                 findEmployee.getName(),

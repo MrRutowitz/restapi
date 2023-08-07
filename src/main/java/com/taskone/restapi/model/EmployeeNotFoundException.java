@@ -1,8 +1,8 @@
 package com.taskone.restapi.model;
 
 public class EmployeeNotFoundException extends RuntimeException {
-    public EmployeeNotFoundException(String message) {
+    public EmployeeNotFoundException(Long message) {
 
-        super(message);
+        super("Employee with ID " + message + " not found");
     }
 }

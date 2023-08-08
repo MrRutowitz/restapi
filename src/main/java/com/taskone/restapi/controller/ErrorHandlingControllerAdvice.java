@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ControllerAdvice
 public class ErrorHandlingControllerAdvice {
     @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseBody
     ValidationErrorResponse onConstraintValidationException(ConstraintViolationException e) {
         List<ValidationErrorResponse.Violation> violations = e.getConstraintViolations().stream()
                 .map(constraintViolation -> ValidationErrorResponse.Violation.builder()

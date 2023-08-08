@@ -1,13 +1,9 @@
 package com.taskone.restapi.mock;
 
-import com.taskone.restapi.controller.EmployeeController;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.test.context.ActiveProfiles;
-
 // @RunWith(SpringRunner.class)
 // @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-//@WebMvcTest(EmployeeController.class)
-//@ActiveProfiles(value = "dev")
+// @WebMvcTest(EmployeeController.class)
+// @ActiveProfiles(value = "dev")
 public class MockTestCorrect {
 
     //    @MockBean

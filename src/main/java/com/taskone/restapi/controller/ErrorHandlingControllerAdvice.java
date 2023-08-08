@@ -4,8 +4,6 @@ import com.taskone.restapi.model.EmployeeNotFoundException;
 import com.taskone.restapi.model.ValidationErrorResponse;
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
-
-import lombok.Builder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,9 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @ControllerAdvice
-
 public class ErrorHandlingControllerAdvice {
-
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseBody
     ValidationErrorResponse onConstraintValidationException(ConstraintViolationException e) {

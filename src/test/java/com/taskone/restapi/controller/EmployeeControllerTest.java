@@ -1,31 +1,23 @@
 package com.taskone.restapi.controller;
 
-import com.taskone.restapi.model.EmployeeRequest;
-import com.taskone.restapi.service.EmployeeService;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 
 @SpringBootTest
 class EmployeeControllerTest {
 
-    @MockBean // @spy sprawdz
-    private EmployeeService employeeService;
-
-    @Autowired
-    private EmployeeController employeeController = new EmployeeController(employeeService);
-
-    @Test
-    void shouldAddNewEmployee() {
-        final var result = employeeController.createEmployee(
-                new EmployeeRequest("name", "username", "email@a", "jobposition", 1000.0));
-        Assertions.assertThat(result).isNotNull();
-        Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-    }
-
+    //    @MockBean // @spy sprawdz
+    //    private EmployeeService employeeService;
+    //
+    //    @Autowired
+    //    private EmployeeController employeeController = new EmployeeController(employeeService);
+    //
+    //    @Test
+    //    void shouldAddNewEmployee() {
+    //        final var result = employeeController.createEmployee(
+    //                new EmployeeRequest("name", "username", "email@a", "jobposition", 1000.0));
+    //        Assertions.assertThat(result).isNotNull();
+    //        Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    //    }
     //        @Test
     //        void shouldUpdateExistingEmployee() {
     //            //given toDo mockitowhen

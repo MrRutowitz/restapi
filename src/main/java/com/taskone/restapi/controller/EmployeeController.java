@@ -42,7 +42,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 
-    @GetMapping("/salaryrange")
+    @GetMapping("/salary-range")
     public List<EmployeeResponse> getEmployeesBySalaryRange(
             @Min(value = 1000, message = "Minimum salary 1000$")
                     @Max(value = 100000, message = "Maximum salary 100000$")
@@ -56,7 +56,7 @@ public class EmployeeController {
         return employeeResponses;
     }
 
-    @GetMapping("/searchbyjobposition")
+    @GetMapping("/search-by-jobposition")
     public List<EmployeeResponse> searchJobsPositionByTitle(
             @Pattern(regexp = "^[A-Za-z]*$", message = "Use only letters!") @RequestParam String title) {
         List<EmployeeResponse> employeeResponses = employeeService.getEmployeesByJobPosition(title);

@@ -58,8 +58,7 @@ public class EmployeeService {
     }
 
     public EmployeeResponse getEmployeeById(Long id) {
-        Employee findEmployee =
-                employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(String.valueOf(id)));
+        Employee findEmployee = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
         return new EmployeeResponse(
                 findEmployee.getId(),
                 findEmployee.getName(),
@@ -97,7 +96,7 @@ public class EmployeeService {
 
     public EmployeeResponse updateEmployee(Long id, EmployeeRequest updatedEmployee) {
         Employee exisitingEmployee =
-                employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(String.valueOf(id)));
+                employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
         if (exisitingEmployee != null) {
             exisitingEmployee.setName(updatedEmployee.getName());
             exisitingEmployee.setUsername(updatedEmployee.getUsername());

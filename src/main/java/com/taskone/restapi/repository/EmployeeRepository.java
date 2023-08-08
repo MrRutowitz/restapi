@@ -12,5 +12,5 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Employee> findBySalaryBetween(double minSalary, double maxSalary);
 
     @Query("select e from Employee e where e.jobposition LIKE %:title%")
-    List<Employee> findByTitleOfJobposition(String title);
+    List<Employee> findByTitleOfJobPosition(String title);
 }

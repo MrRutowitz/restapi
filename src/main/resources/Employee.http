@@ -3,9 +3,9 @@ Content-Type: application/json
 
 {
 "id": 13,
-"name": "Ela",
+"name": "Michal",
 "username": "Kowalczyk",
-"email": "ela.kow@gmail.com",
+"email": "abcxy@gmail",
 "jobposition": "HR",
-"salary": 8000
+"salary": 9000
 }

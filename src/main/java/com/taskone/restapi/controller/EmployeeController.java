@@ -3,25 +3,30 @@ package com.taskone.restapi.controller;
 import com.taskone.restapi.model.EmployeeRequest;
 import com.taskone.restapi.model.EmployeeResponse;
 import com.taskone.restapi.service.EmployeeService;
-import java.time.LocalDate;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/employees")
 @Service
+@Validated
 public class EmployeeController {
 
     private final EmployeeService employeeService;
 
     @PostMapping("/")
-    public ResponseEntity<EmployeeResponse> createEmployee(@RequestBody EmployeeRequest employeeRequest) {
+    public ResponseEntity<EmployeeResponse> createEmployee(@Valid @RequestBody EmployeeRequest employeeRequest) {
         EmployeeResponse employeeResponse = employeeService.createEmployee(employeeRequest);
         return new ResponseEntity<>(employeeResponse, HttpStatus.CREATED);
     }
@@ -39,20 +44,28 @@ public class EmployeeController {
 
     @GetMapping("/salary-range")
     public List<EmployeeResponse> getEmployeesBySalaryRange(
-            @RequestParam double minSalary, @RequestParam double maxSalary) {
+            @Min(value = 1000, message = "Minimum salary 1000$")
+                    @Max(value = 100000, message = "Maximum salary 100000$")
+                    @RequestParam
+                    double minSalary,
+            @Min(value = 1000, message = "Minimum salary 1000$")
+                    @Max(value = 100000, message = "Maximum 100000$")
+                    @RequestParam
+                    double maxSalary) {
         List<EmployeeResponse> employeeResponses = employeeService.getEmployeesBySalaryRange(minSalary, maxSalary);
         return employeeResponses;
     }
 
-    @GetMapping("/search-jobposition")
-    public List<EmployeeResponse> searchJobspositionByTitle(@RequestParam String title) {
-        List<EmployeeResponse> employeeResponses = employeeService.getEmployeesByTitle(title);
+    @GetMapping("/search-by-jobposition")
+    public List<EmployeeResponse> searchJobsPositionByTitle(
+            @Pattern(regexp = "^[A-Za-z]*$", message = "Use only letters!") @RequestParam String title) {
+        List<EmployeeResponse> employeeResponses = employeeService.getEmployeesByJobPosition(title);
         return employeeResponses;
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<EmployeeResponse> updateEmployee(
-            @PathVariable Long id, @RequestBody EmployeeRequest employeeRequest) {
+            @PathVariable Long id, @Valid @RequestBody EmployeeRequest employeeRequest) {
         EmployeeResponse employeeResponse = employeeService.updateEmployee(id, employeeRequest);
         if (employeeResponse != null) {
             return new ResponseEntity<>(employeeResponse, HttpStatus.OK);
@@ -73,6 +86,6 @@ public class EmployeeController {
 
     @GetMapping("/time")
     public ResponseEntity<String> time() {
-        return ResponseEntity.ok(employeeService.dateFormat(LocalDate.now()));
+        return new ResponseEntity<>(employeeService.currentTime(), HttpStatus.OK);
     }
 }

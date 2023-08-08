@@ -1,8 +1,7 @@
-DELETE http://localhost:8082/employees/10
+PUT http://localhost:8082/employees/11
 Content-Type: application/json
 
 {
-  "id": 10,
   "name": "Michal",
   "username": "Rutowicz",
   "email": "mrut@gmail.com",

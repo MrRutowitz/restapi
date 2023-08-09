@@ -19,9 +19,6 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles(value = "dev")
 class EmployeeServiceTest {
 
-    @MockBean
-    EmployeeRepository employeeRepository;
-
     @Autowired
     private EmployeeService employeeService;
 
@@ -88,7 +85,7 @@ class EmployeeServiceTest {
         // when
         List<EmployeeResponse> result = employeeService.getEmployeesBySalaryRange(min, max);
         // then
-        Assertions.assertThat(result.size()).isEqualTo(3);
+        Assertions.assertThat(result.size()).isEqualTo(4);
     }
 
     @Test
@@ -99,7 +96,7 @@ class EmployeeServiceTest {
         final String email = "micrut@gmail.com";
         final String jobpostion = "backend";
         final int salary = 10000;
-        EmployeeRequest updatedEmployee = new EmployeeRequest("mich", "sds", "dsd@sds", "sdd", 1000.0);
+        EmployeeRequest updatedEmployee = new EmployeeRequest("Michal", "micrut", "dsd@sds", "sdd", 1000.0);
         // when
 
         EmployeeResponse result = employeeService.updateEmployee(1L, updatedEmployee);

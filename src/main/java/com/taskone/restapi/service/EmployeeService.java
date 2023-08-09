@@ -44,7 +44,7 @@ public class EmployeeService {
                 savedEmployee.getSalary());
     }
 
-    public List<EmployeeResponse> getAllEmployees(Pageable pageable) {
+    public List<EmployeeResponse> getEmployees(Pageable pageable) {
         Page<Employee> employees = employeeRepository.findAll(pageable);
         return employees.stream()
                 .map(employee -> new EmployeeResponse(

@@ -33,7 +33,7 @@ public class EmployeeController {
 
     @GetMapping(value = "/")
     public List<EmployeeResponse> getAllEmployees(Pageable page) {
-        List<EmployeeResponse> employeeResponses = employeeService.getAllEmployees(page);
+        List<EmployeeResponse> employeeResponses = employeeService.getEmployees(page);
         return employeeResponses;
     }
 

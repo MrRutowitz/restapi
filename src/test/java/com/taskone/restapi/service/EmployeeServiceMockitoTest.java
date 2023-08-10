@@ -34,7 +34,7 @@ public class EmployeeServiceMockitoTest {
         String expectedDate = String.valueOf(LocalDate.now());
         Mockito.when(timeSupplier.getTime()).thenReturn(expectedDate);
         // when
-        String dateString = employeeService.currentTime();
+        final var dateString = employeeService.currentTime();
         // then
         assertEquals(expectedDate, dateString);
         Mockito.verify(timeSupplier, Mockito.atMostOnce()).getTime();

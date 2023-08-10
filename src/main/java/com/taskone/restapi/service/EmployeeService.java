@@ -4,6 +4,7 @@ import com.taskone.restapi.entity.Employee;
 import com.taskone.restapi.model.EmployeeNotFoundException;
 import com.taskone.restapi.model.EmployeeRequest;
 import com.taskone.restapi.model.EmployeeResponse;
+import com.taskone.restapi.model.TimeSupplier;
 import com.taskone.restapi.repository.EmployeeRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,6 +25,8 @@ public class EmployeeService {
     @Value("${date.time.format:yyyy-MM-dd}")
     private String timeFormat;
 
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     public EmployeeResponse createEmployee(EmployeeRequest employeeRequest) {
 
         Employee employee = Employee.builder()
@@ -31,6 +34,7 @@ public class EmployeeService {
                 .username(employeeRequest.getUsername())
                 .email(employeeRequest.getEmail())
                 .jobposition(employeeRequest.getJobposition())
+                .salary(employeeRequest.getSalary())
                 .build();
 
         Employee savedEmployee = employeeRepository.save(employee);
@@ -133,11 +137,15 @@ public class EmployeeService {
         }
     }
 
+    //    public String currentTime() {
+    //        LocalDateTime now = LocalDateTime.now();
+    //        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(timeFormat);
+    //        return now.format(formatter);
     public String currentTime() {
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(timeFormat);
-        return now.format(formatter);
+        TimeSupplier supplier = () -> dateTimeFormatter.format(LocalDateTime.now());
+        return supplier.getTime();
     }
+    //    }
 
     public String welcomeMessage(String name) {
         return String.format("Welcome", name);

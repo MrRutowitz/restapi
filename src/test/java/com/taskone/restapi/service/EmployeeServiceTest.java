@@ -35,22 +35,13 @@ class EmployeeServiceTest {
     @Test
     void shouldCreateEmployee() {
         // given
-        final var expectedName = "michal";
-        final var expectedUsername = "xxx";
-        final var expectedEmail = "xyz@abc";
-        final var expectedJobposition = "xxx";
-        final var expectedSalary = 10000.0;
-
+        final var expectedResult = new EmployeeResponse(11, "michal", "xxx", "xyz@abc", "xxx", 10000.0);
         final var employeeRequest = new EmployeeRequest("michal", "xxx", "xyz@abc", "xxx", 10000.0);
         // when
         final var result = employeeService.createEmployee(employeeRequest);
         // then
         Assertions.assertThat(result).isNotNull();
-        Assertions.assertThat(expectedName).isEqualTo(result.getName());
-        Assertions.assertThat(expectedUsername).isEqualTo(result.getUsername());
-        Assertions.assertThat(expectedEmail).isEqualTo(result.getEmail());
-        Assertions.assertThat(expectedJobposition).isEqualTo(result.getJobposition());
-        Assertions.assertThat(expectedSalary).isEqualTo(result.getSalary());
+        Assertions.assertThat(expectedResult).isEqualTo(result);
     }
 
     @Test
@@ -73,7 +64,7 @@ class EmployeeServiceTest {
         // when
         List<EmployeeResponse> result = employeeService.getEmployeesBySalaryRange(min, max);
         // then
-        Assertions.assertThat(result.size()).isEqualTo(3);
+        Assertions.assertThat(result.size()).isEqualTo(4);
     }
 
     @Test
@@ -83,7 +74,7 @@ class EmployeeServiceTest {
         final var updatedEmployee = new EmployeeRequest("Michal", "micrut", "dsd@sds", "sdd", 1000.0);
         // when
 
-        EmployeeResponse result = employeeService.updateEmployee(1L, updatedEmployee);
+        final var result = employeeService.updateEmployee(1L, updatedEmployee);
 
         // then
         Assertions.assertThat(result).isNotNull();

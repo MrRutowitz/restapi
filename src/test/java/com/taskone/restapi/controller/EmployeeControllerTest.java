@@ -21,48 +21,20 @@ class EmployeeControllerTest {
     private EmployeeController employeeController;
 
     @Test
-    void shouldAddNewEmployee_IfCorrect() {
-        // given
-        EmployeeRequest employeeRequest = new EmployeeRequest("name", "username", "email@a", "jobposition", 1000.0);
-        // when
-        final var result = employeeController.createEmployee(employeeRequest);
-        // then
-        Assertions.assertThat(result).isNotNull();
-        Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-    }
-
-    @Test
     void shouldAddNewEmployee() {
         // given
-        EmployeeResponse employeeResponse = new EmployeeResponse(1, "mich", "aaa", "post@post", "aaa", 1111);
-        Mockito.when(employeeService.createEmployee(Mockito.any())).thenReturn(employeeResponse);
-        EmployeeRequest employeeRequest = new EmployeeRequest("name", "username", "email@a", "jobposition", 1000.0);
+        final var expectedResult = new EmployeeResponse(1, "m11", "aaa", "post@post", "aaa", 111133.0);
+        final var employeeRequest = new EmployeeRequest("name", "username", "aa@ss", "jobposition", 1000.0);
+        Mockito.when(employeeService.createEmployee(employeeRequest)).thenReturn(expectedResult);
         // when
         final var result = employeeController.createEmployee(employeeRequest);
         // then
         Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(expectedResult).isEqualTo(result.getBody());
+        Assertions.assertThat(result.getBody().getName()).isEqualTo(expectedResult.getName());
+        Assertions.assertThat(result.getBody().getEmail()).isEqualTo(expectedResult.getEmail());
+        Assertions.assertThat(result.getBody().getId()).isEqualTo(expectedResult.getId());
         Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         Mockito.verify(employeeService, Mockito.times(1)).createEmployee(employeeRequest);
     }
-
-    //    @Test
-    //    void shouldUpdateExistingEmployee() {
-    //        // given
-    //        EmployeeResponse employeeResponse = new EmployeeResponse(1L, "name", "username", "ema@il", "jobposition",
-    // 1000.0);
-    //        EmployeeRequest updatedEmployee = new EmployeeRequest("aaa", "aaa", "aa@a", "aaa", 2331.2);
-    //        Mockito.when(employeeService.updateEmployee(1L, updatedEmployee)).thenReturn(employeeResponse);
-    //        EmployeeRequest employeeRequest = new EmployeeRequest("aaa", "name", "userna@me", "email", 1000.0);
-    //        // when
-    //        final ResponseEntity<EmployeeResponse> result = employeeController.updateEmployee(1L, employeeRequest);
-    //        // then
-    //        Assertions.assertThat(result).isNotNull();
-    //        final var resultEmployee = result.getBody();
-    //        Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-    //        Assertions.assertThat(resultEmployee).isNotNull();
-    //        Assertions.assertThat(resultEmployee.getId()).isEqualTo(employeeResponse.getId());
-    //        Assertions.assertThat(resultEmployee.getName()).isEqualTo(employeeResponse.getName());
-    //        Assertions.assertThat(resultEmployee.getUsername()).isEqualTo(employeeResponse.getUsername());
-    //        Mockito.verify(employeeService, Mockito.times(1)).updateEmployee(1L, employeeRequest);
-    //    }
 }

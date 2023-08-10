@@ -4,7 +4,6 @@ import com.taskone.restapi.entity.Employee;
 import com.taskone.restapi.model.EmployeeNotFoundException;
 import com.taskone.restapi.model.EmployeeRequest;
 import com.taskone.restapi.model.EmployeeResponse;
-import com.taskone.restapi.model.TimeSupplier;
 import com.taskone.restapi.repository.EmployeeRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,8 +20,6 @@ import org.springframework.stereotype.Service;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Value("${date.time.format:yyyy-MM-dd}")
     private String timeFormat;
@@ -137,9 +134,9 @@ public class EmployeeService {
     }
 
     public String currentTime() {
-
-        TimeSupplier<String> supplier = () -> dateTimeFormatter.format(LocalDateTime.now());
-        return supplier.getTime();
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(timeFormat);
+        return now.format(formatter);
     }
 
     public String welcomeMessage(String name) {

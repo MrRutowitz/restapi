@@ -32,7 +32,7 @@ public class EmployeeController {
     }
 
     @GetMapping(value = "/")
-    public List<EmployeeResponse> getAllEmployees(Pageable page) {
+    public List<EmployeeResponse> listEmployees(Pageable page) {
         List<EmployeeResponse> employeeResponses = employeeService.getEmployees(page);
         return employeeResponses;
     }

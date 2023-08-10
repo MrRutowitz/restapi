@@ -5,6 +5,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
+@Data
 public class EmployeeResponse {
 
     private long id;
@@ -12,5 +13,5 @@ public class EmployeeResponse {
     private String username;
     private String email;
     private String jobposition;
-    private double salary;
+    private Double salary;
 }

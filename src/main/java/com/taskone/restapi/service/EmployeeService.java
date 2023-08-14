@@ -4,14 +4,10 @@ import com.taskone.restapi.entity.Employee;
 import com.taskone.restapi.model.EmployeeNotFoundException;
 import com.taskone.restapi.model.EmployeeRequest;
 import com.taskone.restapi.model.EmployeeResponse;
-import com.taskone.restapi.model.TimeSupplier;
 import com.taskone.restapi.repository.EmployeeRepository;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,11 +17,6 @@ import org.springframework.stereotype.Service;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-
-    @Value("${date.time.format:yyyy-MM-dd}")
-    private String timeFormat;
-
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public EmployeeResponse createEmployee(EmployeeRequest employeeRequest) {
 
@@ -107,15 +98,15 @@ public class EmployeeService {
             exisitingEmployee.setEmail(updatedEmployee.getEmail());
             exisitingEmployee.setJobposition(updatedEmployee.getJobposition());
             exisitingEmployee.setSalary(updatedEmployee.getSalary());
-            exisitingEmployee = employeeRepository.save(exisitingEmployee);
+            Employee savedEmployee = employeeRepository.save(exisitingEmployee);
 
             return new EmployeeResponse(
-                    exisitingEmployee.getId(),
-                    exisitingEmployee.getName(),
-                    exisitingEmployee.getUsername(),
-                    exisitingEmployee.getEmail(),
-                    exisitingEmployee.getJobposition(),
-                    exisitingEmployee.getSalary());
+                    savedEmployee.getId(),
+                    savedEmployee.getName(),
+                    savedEmployee.getUsername(),
+                    savedEmployee.getEmail(),
+                    savedEmployee.getJobposition(),
+                    savedEmployee.getSalary());
         } else {
             return null;
         }
@@ -136,16 +127,6 @@ public class EmployeeService {
             return null;
         }
     }
-
-    //    public String currentTime() {
-    //        LocalDateTime now = LocalDateTime.now();
-    //        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(timeFormat);
-    //        return now.format(formatter);
-    public String currentTime() {
-        TimeSupplier supplier = () -> dateTimeFormatter.format(LocalDateTime.now());
-        return supplier.getTime();
-    }
-    //    }
 
     public String welcomeMessage(String name) {
         return String.format("Welcome", name);

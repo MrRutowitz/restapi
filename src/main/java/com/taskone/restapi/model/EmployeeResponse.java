@@ -14,4 +14,9 @@ public class EmployeeResponse {
     private String email;
     private String jobposition;
     private Double salary;
+
+    //    @Override
+    //    boolean equals(Object object){
+    //
+    //    }
 }

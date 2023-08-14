@@ -1,6 +1,6 @@
 package com.taskone.restapi.model;
 
 @FunctionalInterface
-public interface TimeSupplier {
+public interface TimeSupplier<String> {
     String getTime();
 }

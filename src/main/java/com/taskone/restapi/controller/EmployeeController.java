@@ -3,6 +3,7 @@ package com.taskone.restapi.controller;
 import com.taskone.restapi.model.EmployeeRequest;
 import com.taskone.restapi.model.EmployeeResponse;
 import com.taskone.restapi.service.EmployeeService;
+import com.taskone.restapi.service.TimeService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -24,6 +25,8 @@ import org.springframework.web.bind.annotation.*;
 public class EmployeeController {
 
     private final EmployeeService employeeService;
+
+    private final TimeService timeService;
 
     @PostMapping("/")
     public ResponseEntity<EmployeeResponse> createEmployee(@Valid @RequestBody EmployeeRequest employeeRequest) {
@@ -85,7 +88,9 @@ public class EmployeeController {
     }
 
     @GetMapping("/time")
-    public ResponseEntity<String> time() {
-        return new ResponseEntity<>(employeeService.currentTime(), HttpStatus.OK);
+    public ResponseEntity time() {
+        TimeService timeService = new TimeService();
+        String time = timeService.currentTime().getTime();
+        return new ResponseEntity<>(time, HttpStatus.OK);
     }
 }

@@ -1,5 +1,7 @@
 package com.taskone.restapi.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.taskone.restapi.model.EmployeeRequest;
 import com.taskone.restapi.model.EmployeeResponse;
 import com.taskone.restapi.service.EmployeeService;
@@ -21,50 +23,31 @@ class EmployeeControllerTest {
     private EmployeeController employeeController;
 
     @Test
-    void shouldCreateNewEmployee() {
+    void shouldNotCreateNewEmployeeWithInvalidEmail() {
         // given
-        EmployeeRequest employeeRequest = new EmployeeRequest("naaa", "username", "emai@la", "jobposition", 10000.0);
+        final var invalidEmail = "invalidEmail";
+        final var employeeRequest = new EmployeeRequest("name", "username", invalidEmail, "jobposition", 1000.0);
+        final var expectedEmail = "invalid@email";
         // when
         final var result = employeeController.createEmployee(employeeRequest);
         // then
         Assertions.assertThat(result).isNotNull();
-        Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-    }
-
-    @Test
-    void shouldNotCreateNewEmployeeWithInvalidEmail() {
-        // given
-        String expectedEmail = "xyz@abc.com";
-        EmployeeRequest employeeRequest =
-                new EmployeeRequest("naaa", "username", expectedEmail, "jobposition", 10000.0);
-        // when
-        final var result = employeeController.createEmployee(employeeRequest);
-        // then
-        Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        assertEquals("Invalid email", result.getBody());
     }
 
     @Test
     void shouldNotCreateNewEmployeeWithInvalidName() {
         // given
-        String expectedName = "Ki";
+        final var invalidName = "12Mich";
         EmployeeRequest employeeRequest =
-                new EmployeeRequest(expectedName, "username", "emai@la", "jobposition", 10000.0);
+                new EmployeeRequest(invalidName, "username", "emai@la", "jobposition", 10000.0);
         // when
         final var result = employeeController.createEmployee(employeeRequest);
         // then
-        Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-    }
-
-    @Test
-    void shouldNotCreateNewEmployeeWithInvalidSalary() {
-        // given
-        Double expextedSalary = 1000.0;
-        EmployeeRequest employeeRequest =
-                new EmployeeRequest("name", "username", "emai@la", "jobposition", expextedSalary);
-        // when
-        final var result = employeeController.createEmployee(employeeRequest);
-        // then
-        Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        Assertions.assertThat(result).isNotNull();
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        assertEquals("Invalid name", result.getBody());
     }
 
     @Test

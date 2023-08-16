@@ -2,6 +2,7 @@ package com.taskone.restapi.service;
 
 import com.taskone.restapi.entity.Employee;
 import com.taskone.restapi.model.EmployeeNotFoundException;
+import com.taskone.restapi.model.EmployeeRequest;
 import com.taskone.restapi.model.EmployeeResponse;
 import com.taskone.restapi.repository.EmployeeRepository;
 import java.util.List;
@@ -89,7 +90,7 @@ public class EmployeeService {
                 .collect(Collectors.toList());
     }
 
-    public EmployeeResponse updateEmployee(Long id, com.taskone.restapi.model.EmployeeRequest updatedEmployee) {
+    public EmployeeResponse updateEmployee(Long id, EmployeeRequest updatedEmployee) {
         Employee exisitingEmployee =
                 employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
         if (exisitingEmployee != null) {
@@ -116,9 +117,5 @@ public class EmployeeService {
     public void deleteEmployeeById(Long id) {
         employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
         employeeRepository.deleteById(id);
-    }
-
-    public String welcomeMessage(String name) {
-        return String.format("Welcome", name);
     }
 }

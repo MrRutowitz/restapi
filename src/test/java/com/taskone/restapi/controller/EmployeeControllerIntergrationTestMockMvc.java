@@ -22,7 +22,7 @@ public class EmployeeControllerIntergrationTestMockMvc {
 
     @Test
     public void shouldCreateEmployee() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.post("/employees/") // wskazuje metode i endpoint, ktory ma zostac odpytany
+        mvc.perform(MockMvcRequestBuilders.post("/employees/")
                         .content(asJsonString(
                                 new EmployeeResponse(1, "name", "surname", "aaa@gmail.com", "asa", 1000.0)))
                         .contentType(MediaType.APPLICATION_JSON)

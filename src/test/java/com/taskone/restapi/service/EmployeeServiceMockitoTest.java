@@ -36,7 +36,6 @@ public class EmployeeServiceMockitoTest {
     public void shouldGetCurrentTime() {
         // given
         final var expectedDate = "2023-08-16";
-        // Mockito.when(timeSupplier.getTime()).thenReturn();
         // when
         final var result = timeService.currentTime().getTime();
         // then

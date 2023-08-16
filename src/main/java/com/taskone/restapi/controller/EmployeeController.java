@@ -79,9 +79,6 @@ public class EmployeeController {
     public ResponseEntity<String> deleteEmployee(@PathVariable Long id) {
         employeeService.deleteEmployeeById(id);
         return ResponseEntity.ok().build();
-        // return new ResponseEntity<>("Employee with id "+id+" is deleted", HttpStatus.OK);
-        // noContent - ustawia cechy obiektu, komunikat zwrotki HTTP bez zawartosci
-
     }
 
     @GetMapping("/time")

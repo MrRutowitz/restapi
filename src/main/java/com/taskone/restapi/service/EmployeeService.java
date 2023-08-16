@@ -19,7 +19,7 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
-    public EmployeeResponse createEmployee(com.taskone.restapi.model.EmployeeRequest employeeRequest) {
+    public EmployeeResponse createEmployee(EmployeeRequest employeeRequest) {
 
         Employee employee = Employee.builder()
                 .name(employeeRequest.getName())

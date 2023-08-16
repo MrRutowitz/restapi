@@ -82,8 +82,9 @@ public class EmployeeController {
     }
 
     @GetMapping("/time")
-    public ResponseEntity time() {
+    public ResponseEntity<String> time() {
         TimeService timeService = new TimeService();
-        return new ResponseEntity<>(timeService.currentTime().getTime(), HttpStatus.OK);
+        String time = timeService.currentTime().getTime();
+        return new ResponseEntity<>(time, HttpStatus.OK);
     }
 }

@@ -29,14 +29,14 @@ public class EmployeeServiceMockitoTest {
     @Autowired
     private EmployeeService employeeService;
 
-    @Autowired
+    @MockBean
     private TimeService timeService;
 
     @Test
     public void shouldGetCurrentTime() {
         // given
-        final var expectedDate = "2023-08-16";
-        Mockito.when(timeService.currentTime()).thenReturn(() -> "2023-08-16");
+        final var expectedDate = "2023-08-15";
+        Mockito.when(timeService.currentTime()).thenReturn(() -> "2023-08-15");
         // when
         final var result = timeService.currentTime().getTime();
         // then

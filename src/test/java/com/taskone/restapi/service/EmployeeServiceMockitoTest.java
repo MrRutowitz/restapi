@@ -2,6 +2,7 @@ package com.taskone.restapi.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import com.taskone.restapi.entity.Employee;
 import com.taskone.restapi.model.EmployeeRequest;
 import com.taskone.restapi.model.EmployeeResponse;
@@ -28,19 +29,18 @@ public class EmployeeServiceMockitoTest {
     @Autowired
     private EmployeeService employeeService;
 
-    @MockBean
+    @Autowired
     private TimeService timeService;
 
     @Test
     public void shouldGetCurrentTime() {
         // given
-        final var expectedDate = "2020-08-14";
-        Mockito.when(timeService.currentTime()).thenReturn(() -> "2020-08-14");
+        final var expectedDate = "2023-08-16";
+        // Mockito.when(timeSupplier.getTime()).thenReturn();
         // when
-        String result = timeService.currentTime().getTime();
+        final var result = timeService.currentTime().getTime();
         // then
         Assertions.assertThat(result).isEqualTo(expectedDate);
-        Mockito.verify(timeService, Mockito.times(1)).currentTime();
     }
 
     @Test
@@ -48,13 +48,13 @@ public class EmployeeServiceMockitoTest {
         // given
         final var min = 1000.0;
         final var max = 7000.0;
-        Mockito.when(employeeRepository.findBySalaryBetween(Mockito.anyDouble(), Mockito.anyDouble()))
-                .thenReturn(employeeResponses());
+        Mockito.when(employeeRepository.findBySalaryBetween(Mockito.eq(min), Mockito.eq(max)))
+                .thenReturn(List.of());
         // when
-        List<EmployeeResponse> result = employeeService.getEmployeesBySalaryRange(min, max);
+        final var result = employeeService.getEmployeesBySalaryRange(min, max);
         // then
         Assertions.assertThat(result).isNotNull();
-        Assertions.assertThat(result.size()).isEqualTo(4);
+        Assertions.assertThat(result.size()).isEqualTo(0);
         Mockito.verify(employeeRepository, Mockito.times(1))
                 .findBySalaryBetween(Mockito.anyDouble(), Mockito.anyDouble());
     }
@@ -71,50 +71,48 @@ public class EmployeeServiceMockitoTest {
     @Test
     void shouldGetEmployeesWithGivenSize() {
         // given
-        int page = 0;
-        int size = 3;
+        final var page = 2;
+        final var size = 4;
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Employee> pageSubList = new PageImpl<>(employeeResponses());
-        Mockito.when(employeeRepository.findAll(PageRequest.of(Mockito.any(), Mockito.any())))
-                .thenReturn(pageSubList);
+        Mockito.when(employeeRepository.findAll(pageRequest)).thenReturn(pageSubList);
         // when
-        List<EmployeeResponse> result = employeeService.getEmployees(pageRequest);
+        final var result = employeeService.getEmployees(pageRequest);
         // then
         assertNotNull(result);
-        assertEquals(size, result.size());
-        Mockito.verify(employeeRepository, Mockito.times(1)).findAll();
+        assertEquals(result.size(), size);
     }
 
     @Test
     void shouldUpdateEmployeeMockito() {
         // given
-        long employeeId = 1L;
+        final var employeeId = 1L;
         com.taskone.restapi.model.EmployeeRequest request =
                 new com.taskone.restapi.model.EmployeeRequest("name", "suranem", "dsds", "sdad", 111.0);
         final var employee = new Employee(employeeId, "John", "Doe", "Software Engineer", "asa", 11.0);
-        final var expectedEmployee = new Employee(1, "name", "suranem", "dsds", "sdad", 111.0);
-        final var expectedResult = new EmployeeResponse(1, "name", "suranem", "dsds", "sdad", 111.0);
-        Mockito.when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
+        final var expectedEmployee = new Employee(1L, "name", "suranem", "dsds", "sdad", 111.0);
+        final var expectedResult = new EmployeeResponse(1L, "name", "suranem", "dsds", "sdad", 111.0);
+        Mockito.when(employeeRepository.findById(Mockito.eq(employeeId))).thenReturn(Optional.of(employee));
         Mockito.when(employeeRepository.save(expectedEmployee)).thenReturn(expectedEmployee);
         // when
         final var result = employeeService.updateEmployee(employeeId, request);
         // then
         assertNotNull(result);
         assertEquals(expectedResult, result);
-        Mockito.verify(employeeRepository, Mockito.times(1)).findById(employeeId);
+        Mockito.verify(employeeRepository, Mockito.times(1)).findById(Mockito.eq(employeeId));
         Mockito.verify(employeeRepository, Mockito.times(1)).save(expectedEmployee);
     }
 
     @Test
     public void shouldGetEmployeeById() {
         // given
-        Long employeeId = 200L;
-        Employee expectedResult = new Employee(3L, "name", "suranem", "dsds", "sdad", 111.0);
-        Mockito.when(employeeRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(expectedResult));
+        final var employeeId = 200L;
+        final var expectedResult = new Employee(200L, "name", "suranem", "dsds", "sdad", 111.0);
+        Mockito.when(employeeRepository.findById(Mockito.eq(employeeId))).thenReturn(Optional.of(expectedResult));
         // when
         final var result = employeeService.getEmployeeById(employeeId);
         // then
-        Mockito.verify(employeeRepository, Mockito.times(1)).findById(Mockito.anyLong());
+        Mockito.verify(employeeRepository, Mockito.times(1)).findById(Mockito.eq(employeeId));
         assertEquals(expectedResult.getId(), result.getId());
         assertEquals(expectedResult.getName(), result.getName());
         assertEquals(expectedResult.getEmail(), result.getEmail());

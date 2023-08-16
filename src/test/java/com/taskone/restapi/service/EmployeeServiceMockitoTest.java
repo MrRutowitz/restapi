@@ -36,10 +36,12 @@ public class EmployeeServiceMockitoTest {
     public void shouldGetCurrentTime() {
         // given
         final var expectedDate = "2023-08-16";
+        Mockito.when(timeService.currentTime()).thenReturn(() -> "2023-08-16");
         // when
         final var result = timeService.currentTime().getTime();
         // then
         Assertions.assertThat(result).isEqualTo(expectedDate);
+        Mockito.verify(timeService, Mockito.times(1)).currentTime();
     }
 
     @Test

@@ -1,17 +1,14 @@
-package com.taskone.restapi.service;
+package com.taskone.restapi.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import com.taskone.restapi.model.EmployeeRequest;
+import static org.junit.jupiter.api.Assertions.*;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class EmployeeServiceTest {
+class EmployeeRequestTest {
 
     @Test
     void emailIsInvalid() {

@@ -15,8 +15,15 @@ public class EmployeeResponse {
     private String jobposition;
     private Double salary;
 
-    //    @Override
-    //    boolean equals(Object object){
-    //
-    //    }
+//    @Override
+//    public boolean equals(Object object) {
+//        if (!(object instanceof EmployeeResponse)) {
+//            return false;
+//        }
+//        EmployeeResponse employeeResponseTest = (EmployeeResponse) object;
+//        if (employeeResponseTest.getName() == this.getName() && employeeResponseTest.getEmail() == this.getEmail()) {
+//            return true;
+//        }
+//        return false;
+//    }
 }

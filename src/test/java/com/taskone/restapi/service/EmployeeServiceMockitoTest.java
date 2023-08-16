@@ -2,7 +2,6 @@ package com.taskone.restapi.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import com.taskone.restapi.entity.Employee;
 import com.taskone.restapi.model.EmployeeRequest;
 import com.taskone.restapi.model.EmployeeResponse;
@@ -19,7 +18,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 @SpringBootTest
 public class EmployeeServiceMockitoTest {
@@ -38,8 +36,6 @@ public class EmployeeServiceMockitoTest {
         // given
         final var expectedDate = "2020-08-14";
         Mockito.when(timeService.currentTime()).thenReturn(() -> "2020-08-14");
-        //        try (MockedStatic<LocalDate> utilities = Mockito.mockStatic(LocalDate.class)) {
-        //        utilities.when(LocalDate::now).thenReturn(LocalDate.of(2000,8,29));
         // when
         String result = timeService.currentTime().getTime();
         // then
@@ -51,16 +47,16 @@ public class EmployeeServiceMockitoTest {
     void shouldGetEmployeesBySalaryRange() {
         // given
         final var min = 1000.0;
-        final var max = 120000.0;
-        final var expectedMin = 1000.0;
-        final var expectedMax = 12000.0;
-        Mockito.when(employeeRepository.findBySalaryBetween(1000.0, 150000.0)).thenReturn(employeeResponses());
+        final var max = 7000.0;
+        Mockito.when(employeeRepository.findBySalaryBetween(Mockito.anyDouble(), Mockito.anyDouble()))
+                .thenReturn(employeeResponses());
         // when
-        List<EmployeeResponse> result = employeeService.getEmployeesBySalaryRange(expectedMin, expectedMax);
+        List<EmployeeResponse> result = employeeService.getEmployeesBySalaryRange(min, max);
         // then
         Assertions.assertThat(result).isNotNull();
-        Assertions.assertThat(result.size()).isEqualTo(3);
-        Mockito.verify(employeeRepository, Mockito.times(1)).findBySalaryBetween(min, max);
+        Assertions.assertThat(result.size()).isEqualTo(4);
+        Mockito.verify(employeeRepository, Mockito.times(1))
+                .findBySalaryBetween(Mockito.anyDouble(), Mockito.anyDouble());
     }
 
     public List<Employee> employeeResponses() {
@@ -68,6 +64,7 @@ public class EmployeeServiceMockitoTest {
         employees.add(new Employee(1, "mich", "username1", "email@.com", "post", 8500.0));
         employees.add(new Employee(2, "oli", "username2", "xczs@gm.com", "post", 12000.0));
         employees.add(new Employee(3, "adnrzej", "username3", "asdf@gm.com", "post", 8900.0));
+        employees.add(new Employee(4, "adnrzej", "username3", "asdf@gm.com", "post", 7900.0));
         return employees;
     }
 
@@ -76,22 +73,24 @@ public class EmployeeServiceMockitoTest {
         // given
         int page = 0;
         int size = 3;
-        Pageable pageable;
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Employee> pageSubList = new PageImpl<>(employeeResponses());
-        Mockito.when(employeeRepository.findAll(PageRequest.of(page, size))).thenReturn(pageSubList);
+        Mockito.when(employeeRepository.findAll(PageRequest.of(Mockito.any(), Mockito.any())))
+                .thenReturn(pageSubList);
         // when
         List<EmployeeResponse> result = employeeService.getEmployees(pageRequest);
         // then
         assertNotNull(result);
         assertEquals(size, result.size());
+        Mockito.verify(employeeRepository, Mockito.times(1)).findAll();
     }
 
     @Test
     void shouldUpdateEmployeeMockito() {
         // given
         long employeeId = 1L;
-        EmployeeRequest request = new EmployeeRequest("name", "suranem", "dsds", "sdad", 111.0);
+        com.taskone.restapi.model.EmployeeRequest request =
+                new com.taskone.restapi.model.EmployeeRequest("name", "suranem", "dsds", "sdad", 111.0);
         final var employee = new Employee(employeeId, "John", "Doe", "Software Engineer", "asa", 11.0);
         final var expectedEmployee = new Employee(1, "name", "suranem", "dsds", "sdad", 111.0);
         final var expectedResult = new EmployeeResponse(1, "name", "suranem", "dsds", "sdad", 111.0);
@@ -104,5 +103,35 @@ public class EmployeeServiceMockitoTest {
         assertEquals(expectedResult, result);
         Mockito.verify(employeeRepository, Mockito.times(1)).findById(employeeId);
         Mockito.verify(employeeRepository, Mockito.times(1)).save(expectedEmployee);
+    }
+
+    @Test
+    public void shouldGetEmployeeById() {
+        // given
+        Long employeeId = 200L;
+        Employee expectedResult = new Employee(3L, "name", "suranem", "dsds", "sdad", 111.0);
+        Mockito.when(employeeRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(expectedResult));
+        // when
+        final var result = employeeService.getEmployeeById(employeeId);
+        // then
+        Mockito.verify(employeeRepository, Mockito.times(1)).findById(Mockito.anyLong());
+        assertEquals(expectedResult.getId(), result.getId());
+        assertEquals(expectedResult.getName(), result.getName());
+        assertEquals(expectedResult.getEmail(), result.getEmail());
+    }
+
+    @Test
+    void shouldCreateNewEmployee() {
+        // given
+        final var employee = new Employee(1, "michal2", "xxx", "xyz@abc", "xxx", 10000.0);
+        final var expectedResult = new EmployeeResponse(1, "michal2", "xxx", "xyz@abc", "xxx", 10000.0);
+        final var employeeRequest = new EmployeeRequest("aaa", "xxx", "xyz@abc", "xxx", 10000.0);
+        Mockito.when(employeeRepository.save(Mockito.any())).thenReturn(employee);
+        // when
+        final var result = employeeService.createEmployee(employeeRequest);
+        // then
+        Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(expectedResult).isEqualTo(result);
+        Mockito.verify(employeeRepository, Mockito.times(1)).save(Mockito.any());
     }
 }

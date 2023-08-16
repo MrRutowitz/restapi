@@ -26,8 +26,6 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
 
-    private final TimeService timeService;
-
     @PostMapping("/")
     public ResponseEntity<EmployeeResponse> createEmployee(@Valid @RequestBody EmployeeRequest employeeRequest) {
         EmployeeResponse employeeResponse = employeeService.createEmployee(employeeRequest);
@@ -78,17 +76,16 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<EmployeeResponse> deleteEmployee(@PathVariable Long id) {
-        EmployeeResponse employeeResponse = employeeService.deleteEmployeeById(id);
-        if (employeeResponse != null) {
-            return new ResponseEntity<>(employeeResponse, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<String> deleteEmployee(@PathVariable Long id) {
+        employeeService.deleteEmployeeById(id);
+        return ResponseEntity.ok().build();
+        // return new ResponseEntity<>("Employee with id "+id+" is deleted", HttpStatus.OK);
+        // noContent - ustawia cechy obiektu, komunikat zwrotki HTTP bez zawartosci
+
     }
 
     @GetMapping("/time")
-    public ResponseEntity time() {
+    public ResponseEntity<String> time() {
         TimeService timeService = new TimeService();
         String time = timeService.currentTime().getTime();
         return new ResponseEntity<>(time, HttpStatus.OK);

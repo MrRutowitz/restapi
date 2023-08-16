@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TimeService {
 
-    //    @Value("${date.time.format}")
-    //    public String timeFormat;
+    //        @Value("${date.time.format:yyyy-MM-dd}")
+    //        public String timeFormat;
 
     public TimeSupplier<String> currentTime() {
         return () -> {

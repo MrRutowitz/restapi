@@ -27,7 +27,7 @@ public class EmployeeControllerIntergrationTestMockMvc {
                                 new EmployeeResponse(1, "name", "surname", "aaa@gmail.com", "asa", 1000.0)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated()) // oczekiwany status
+                .andExpect(status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
     }
 

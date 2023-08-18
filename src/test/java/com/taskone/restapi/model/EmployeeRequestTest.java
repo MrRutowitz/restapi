@@ -9,7 +9,6 @@ import jakarta.validation.ValidatorFactory;
 import java.lang.reflect.Field;
 import java.util.Set;
 import java.util.stream.Stream;
-import lombok.SneakyThrows;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -25,10 +24,10 @@ class EmployeeRequestTest {
                 Arguments.of("salary", null));
     }
 
-    @SneakyThrows
     @ParameterizedTest
     @MethodSource("provideFieldAndInvalidValue")
-    void testInvalidEmployeeRequest(String fieldName, Object invalidValue) {
+    void testInvalidEmployeeRequest(String fieldName, Object invalidValue)
+            throws NoSuchFieldException, IllegalAccessException {
         EmployeeRequest employeeRequest = getValidEmployeeRequest();
 
         Field field = EmployeeRequest.class.getDeclaredField(fieldName);

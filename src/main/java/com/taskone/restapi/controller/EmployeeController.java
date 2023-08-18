@@ -26,6 +26,8 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
 
+    private final TimeService timeService;
+
     @PostMapping("/")
     public ResponseEntity<EmployeeResponse> createEmployee(@Valid @RequestBody EmployeeRequest employeeRequest) {
         EmployeeResponse employeeResponse = employeeService.createEmployee(employeeRequest);
@@ -82,8 +84,7 @@ public class EmployeeController {
 
     @GetMapping("/time")
     public ResponseEntity<String> time() {
-        TimeService timeService = new TimeService();
-        String time = timeService.currentTime().getTime();
+        String time = timeService.currentTime();
         return new ResponseEntity<>(time, HttpStatus.OK);
     }
 }

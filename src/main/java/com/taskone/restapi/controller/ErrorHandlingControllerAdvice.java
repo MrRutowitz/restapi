@@ -25,7 +25,7 @@ public class ErrorHandlingControllerAdvice {
         return new ResponseEntity<>(validationErrorResponse, HttpStatus.BAD_REQUEST).getBody();
     }
 
-    @ExceptionHandler({MethodArgumentNotValidException.class})
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<ValidationErrorResponse> onMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         List<ValidationErrorResponse.Violation> violations = e.getBindingResult().getFieldErrors().stream()
                 .map(fieldError -> ValidationErrorResponse.Violation.builder()
@@ -38,7 +38,7 @@ public class ErrorHandlingControllerAdvice {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({EmployeeNotFoundException.class})
+    @ExceptionHandler(EmployeeNotFoundException.class)
     public ResponseEntity<String> handleEmployeeNotFoundException(EmployeeNotFoundException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }

@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "name": "Michal",
+    "username": "micrut",
+    "email": "micrut@gmail.com",
+    "jobposition": "Backend",
+    "salary": 10000
+  },
+  {
+    "id": 2,
+    "name": "Ervin Howell",
+    "username": "Antonette",
+    "email": "Shanna@melissa.tv",
+    "jobposition": "PM",
+    "salary": 15000
+  },
+  {
+    "id": 3,
+    "name": "Clementine Bauch",
+    "username": "Samantha",
+    "email": "Nathan@yesenia.net",
+    "jobposition": "HR",
+    "salary": "8000"
+  },
+  {
+    "id": 4,
+    "name": "Patricia Lebsack",
+    "username": "Karianne",
+    "email": "Julianne.OConner@kory.org",
+    "jobposition": "BackendDeveloper",
+    "salary": 18000
+  },
+  {
+    "id": 5,
+    "name": "Chelsey Dietrich",
+    "username": "Kamren",
+    "email": "Lucio_Hettinger@annie.ca",
+    "jobposition": "FrontedDeveloper",
+    "salary": 10000
+  },
+  {
+    "id": 6,
+    "name": "Mrs. Dennis Schulist",
+    "username": "Leopoldo_Corkery",
+    "email": "Karley_Dach@jasper.info",
+    "jobposition": "DevOps",
+    "salary": 13000
+  },
+  {
+    "id": 7,
+    "name": "Kurtis Weissnat",
+    "username": "Elwyn.Skiles",
+    "email": "Telly.Hoeger@billy.biz",
+    "jobposition": "BackendDeveloper",
+    "salary": 10000
+  },
+  {
+    "id": 8,
+    "name": "Nicholas Runolfsdottir V",
+    "username": "Maxime_Nienow",
+    "email": "Sherwood@rosamond.me",
+    "jobposition": "PM",
+    "salary": 9000
+  },
+  {
+    "id": 9,
+    "name": "Glenna Reichert",
+    "username": "Delphine",
+    "email": "Chaim_McDermott@dana.io",
+    "jobposition": "HR",
+    "salary": 5000
+  },
+  {
+    "id": 10,
+    "name": "Clementina DuBuque",
+    "username": "Moriah.Stanton",
+    "email": "Rey.Padberg@karina.biz",
+    "jobposition": "Head of Engineering",
+    "salary": 19000
+  }
+]

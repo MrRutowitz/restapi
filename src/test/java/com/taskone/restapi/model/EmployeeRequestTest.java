@@ -35,14 +35,13 @@ class EmployeeRequestTest {
         field.set(employeeRequest, invalidValue);
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        final Validator validator = factory.getValidator();
+        Validator validator = factory.getValidator();
 
         Set<ConstraintViolation<EmployeeRequest>> constraintViolations = validator.validate(employeeRequest);
-
         assertThat(constraintViolations.size()).isOne();
     }
 
     private EmployeeRequest getValidEmployeeRequest() {
-        return new EmployeeRequest("mi", "michal", "ema@il", "xyzabc", 10000.0);
+        return new EmployeeRequest("Michal", "username", "email@aaa", "backend", 10000.0);
     }
 }

@@ -29,14 +29,16 @@ public class EmployeeServiceTest {
     @Autowired
     EmployeeService employeeService;
 
+    @MockBean
+    TimeService timeService;
+
     @Test
     public void shouldGetCurrentTime() {
         // given
         final var expectedDate = "2023-08-15";
-        final var timeService = Mockito.mock(TimeService.class);
         Mockito.when(timeService.currentTime()).thenReturn(expectedDate);
         // when
-        final var result = timeService.currentTime();
+        final var result = employeeService.currentTime();
         // then
         Assertions.assertThat(result).isEqualTo(expectedDate);
         Mockito.verify(timeService, Mockito.times(1)).currentTime();
@@ -46,23 +48,23 @@ public class EmployeeServiceTest {
     void shouldGetEmployeesBySalaryRange() {
         // given
         final var min = 1000.0;
-        final var max = 7000.0;
-        Mockito.when(employeeRepositoryMock.findBySalaryBetween(min, max)).thenReturn(List.of());
+        final var max = 9000.0;
+        Mockito.when(employeeRepositoryMock.findBySalaryBetween(Mockito.eq(min), Mockito.eq(max)))
+                .thenReturn(employeeResponses());
         // when
         final var result = employeeService.getEmployeesBySalaryRange(min, max);
         // then
         Assertions.assertThat(result).isNotNull();
-        Assertions.assertThat(result.size()).isEqualTo(0);
-        Mockito.verify(employeeRepositoryMock, Mockito.times(1))
-                .findBySalaryBetween(Mockito.anyDouble(), Mockito.anyDouble());
+        Assertions.assertThat(result.size()).isEqualTo(4);
+        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).findBySalaryBetween(Mockito.eq(min), Mockito.eq(max));
     }
 
     public List<Employee> employeeResponses() {
         List<Employee> employees = new ArrayList<>();
-        employees.add(new Employee(1, "Michal", "username1", "email@.com", "post", 8500.0));
-        employees.add(new Employee(2, "Ola", "username2", "xczs@gm.com", "post", 12000.0));
-        employees.add(new Employee(3, "Jan", "username3", "asdf@gm.com", "post", 8900.0));
-        employees.add(new Employee(4, "Andrzej", "username3", "asdf@gm.com", "post", 7900.0));
+        employees.add(new Employee(1, "Michal", "username1", "email@.com", "post1", 8500.0));
+        employees.add(new Employee(2, "Ala", "username2", "asddf@gm.com", "post2", 8900.0));
+        employees.add(new Employee(3, "Jan", "username3", "fasdf@gm.com", "post3", 8900.0));
+        employees.add(new Employee(4, "Andrzej", "username4", "asdasf@gm.com", "post4", 7900.0));
         return employees;
     }
 
@@ -79,6 +81,7 @@ public class EmployeeServiceTest {
         // then
         assertNotNull(result);
         assertEquals(result.size(), size);
+        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).findAll(pageRequest);
     }
 
     @Test
@@ -89,14 +92,14 @@ public class EmployeeServiceTest {
         final var employee = new Employee(employeeId, "John", "bbbb", "xyz@aa", "jobposition", 11.0);
         final var updatedEmployee = new Employee(employeeId, "name", "dddd", "abc@xx", "jobposition", 111.0);
         final var employeeResponse = new EmployeeResponse(employeeId, "name", "dddd", "abc@xx", "jobposition", 111.0);
-        Mockito.when(employeeRepositoryMock.findById(employeeId)).thenReturn(Optional.of(employee));
+        Mockito.when(employeeRepositoryMock.findById(Mockito.eq(employeeId))).thenReturn(Optional.of(employee));
         Mockito.when(employeeRepositoryMock.save(updatedEmployee)).thenReturn(updatedEmployee);
         // when
         final var result = employeeService.updateEmployee(employeeId, updateRequest);
         // then
         assertNotNull(result);
         assertEquals(employeeResponse, result);
-        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).findById(employeeId);
+        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).findById(Mockito.eq(employeeId));
         Mockito.verify(employeeRepositoryMock, Mockito.times(1)).save(updatedEmployee);
     }
 
@@ -104,12 +107,12 @@ public class EmployeeServiceTest {
     public void shouldGetEmployeeById() {
         // given
         final var employeeId = 200L;
-        final var expectedResult = new Employee(employeeId, "name", "suranem", "dsds", "sdad", 111.0);
-        Mockito.when(employeeRepositoryMock.findById(employeeId)).thenReturn(Optional.of(expectedResult));
+        final var expectedResult = new Employee(employeeId, "name", "surname", "dsds", "sdad", 111.0);
+        Mockito.when(employeeRepositoryMock.findById(Mockito.eq(employeeId))).thenReturn(Optional.of(expectedResult));
         // when
         final var result = employeeService.getEmployeeById(employeeId);
         // then
-        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).findById(employeeId);
+        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).findById(Mockito.eq(employeeId));
         assertEquals(expectedResult.getId(), result.getId());
         assertEquals(expectedResult.getName(), result.getName());
         assertEquals(expectedResult.getEmail(), result.getEmail());
@@ -140,7 +143,7 @@ public class EmployeeServiceTest {
         employeeService.deleteEmployeeById(employeeId);
         // then
         Mockito.verify(employeeRepositoryMock, Mockito.times(1)).findById(employeeId);
-        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).deleteById(Mockito.eq(employeeId));
+        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).deleteById(employeeId);
     }
 
     @Test

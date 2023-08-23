@@ -84,7 +84,7 @@ public class EmployeeController {
 
     @GetMapping("/time")
     public ResponseEntity<String> time() {
-        String time = timeService.currentTime();
+        String time = employeeService.currentTime();
         return new ResponseEntity<>(time, HttpStatus.OK);
     }
 }

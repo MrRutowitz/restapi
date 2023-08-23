@@ -19,6 +19,8 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
+    private final TimeService timeService;
+
     public EmployeeResponse createEmployee(EmployeeRequest employeeRequest) {
 
         Employee employee = Employee.builder()
@@ -117,5 +119,9 @@ public class EmployeeService {
     public void deleteEmployeeById(Long id) {
         employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
         employeeRepository.deleteById(id);
+    }
+
+    public String currentTime() {
+        return timeService.currentTime();
     }
 }

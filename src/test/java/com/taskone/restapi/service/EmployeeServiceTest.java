@@ -71,17 +71,17 @@ public class EmployeeServiceTest {
     @Test
     void shouldGetEmployeesWithGivenSize() {
         // given
-        final var page = 2;
-        final var size = 4;
+        final var page = 1;
+        final var size = employeeResponses().size();
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Employee> pageSubList = new PageImpl<>(employeeResponses());
-        Mockito.when(employeeRepositoryMock.findAll(pageRequest)).thenReturn(pageSubList);
+        Mockito.when(employeeRepositoryMock.findAll(Mockito.eq(pageRequest))).thenReturn(pageSubList);
         // when
         final var result = employeeService.getEmployees(pageRequest);
         // then
         assertNotNull(result);
         assertEquals(result.size(), size);
-        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).findAll(pageRequest);
+        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).findAll(Mockito.eq(pageRequest));
     }
 
     @Test
@@ -142,7 +142,7 @@ public class EmployeeServiceTest {
         // when
         employeeService.deleteEmployeeById(employeeId);
         // then
-        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).findById(employeeId);
+        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).findById(Mockito.eq(employeeId));
         Mockito.verify(employeeRepositoryMock, Mockito.times(1)).deleteById(employeeId);
     }
 

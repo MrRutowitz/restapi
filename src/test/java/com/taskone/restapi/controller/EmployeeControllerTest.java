@@ -15,7 +15,7 @@ import org.springframework.http.HttpStatus;
 class EmployeeControllerTest {
 
     @MockBean
-    private EmployeeService employeeService;
+    private EmployeeService employeeServiceMock;
 
     @Autowired
     private EmployeeController employeeController;
@@ -25,7 +25,7 @@ class EmployeeControllerTest {
         // given
         final var expectedResult = new EmployeeResponse(1, "m11", "aaa", "post@post", "aaa", 111133.0);
         final var employeeRequest = new EmployeeRequest("name", "username", "aa@ss", "jobposition", 1000.0);
-        Mockito.when(employeeService.createEmployee(employeeRequest)).thenReturn(expectedResult);
+        Mockito.when(employeeServiceMock.createEmployee(employeeRequest)).thenReturn(expectedResult);
         // when
         final var result = employeeController.createEmployee(employeeRequest);
         // then
@@ -37,6 +37,6 @@ class EmployeeControllerTest {
                 .isEqualTo(result.getBody().getEmail());
         Assertions.assertThat(expectedResult.getId()).isEqualTo(result.getBody().getId());
         Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        Mockito.verify(employeeService, Mockito.times(1)).createEmployee(employeeRequest);
+        Mockito.verify(employeeServiceMock, Mockito.times(1)).createEmployee(employeeRequest);
     }
 }

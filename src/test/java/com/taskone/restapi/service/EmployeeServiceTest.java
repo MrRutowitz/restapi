@@ -24,24 +24,24 @@ import org.springframework.data.domain.PageRequest;
 public class EmployeeServiceTest {
 
     @MockBean
-    EmployeeRepository employeeRepository;
+    EmployeeRepository employeeRepositoryMock;
 
     @Autowired
     EmployeeService employeeService;
 
     @MockBean
-    TimeService timeService;
+    TimeService timeServiceMock;
 
     @Test
     public void shouldGetCurrentTime() {
         // given
         final var expectedDate = "2023-08-15";
-        Mockito.when(timeService.currentTime()).thenReturn(expectedDate);
+        Mockito.when(timeServiceMock.currentTime()).thenReturn(expectedDate);
         // when
         final var result = employeeService.currentTime();
         // then
         Assertions.assertThat(result).isEqualTo(expectedDate);
-        Mockito.verify(timeService, Mockito.times(1)).currentTime();
+        Mockito.verify(timeServiceMock, Mockito.times(1)).currentTime();
     }
 
     @Test
@@ -49,13 +49,13 @@ public class EmployeeServiceTest {
         // given
         final var min = 1000.0;
         final var max = 9000.0;
-        Mockito.when(employeeRepository.findBySalaryBetween(min, max)).thenReturn(employeeResponses());
+        Mockito.when(employeeRepositoryMock.findBySalaryBetween(min, max)).thenReturn(employeeResponses());
         // when
         final var result = employeeService.getEmployeesBySalaryRange(min, max);
         // then
         Assertions.assertThat(result).isNotNull();
         Assertions.assertThat(result.size()).isEqualTo(4);
-        Mockito.verify(employeeRepository, Mockito.times(1)).findBySalaryBetween(min, max);
+        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).findBySalaryBetween(min, max);
     }
 
     public List<Employee> employeeResponses() {
@@ -74,13 +74,13 @@ public class EmployeeServiceTest {
         final var size = employeeResponses().size();
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Employee> pageSubList = new PageImpl<>(employeeResponses());
-        Mockito.when(employeeRepository.findAll(pageRequest)).thenReturn(pageSubList);
+        Mockito.when(employeeRepositoryMock.findAll(pageRequest)).thenReturn(pageSubList);
         // when
         final var result = employeeService.getEmployees(pageRequest);
         // then
         assertNotNull(result);
         assertEquals(result.size(), size);
-        Mockito.verify(employeeRepository, Mockito.times(1)).findAll(pageRequest);
+        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).findAll(pageRequest);
     }
 
     @Test
@@ -91,15 +91,15 @@ public class EmployeeServiceTest {
         final var employee = new Employee(employeeId, "John", "bbbb", "xyz@aa", "jobposition", 11.0);
         final var updatedEmployee = new Employee(employeeId, "name", "dddd", "abc@xx", "jobposition", 111.0);
         final var employeeResponse = new EmployeeResponse(employeeId, "name", "dddd", "abc@xx", "jobposition", 111.0);
-        Mockito.when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
-        Mockito.when(employeeRepository.save(updatedEmployee)).thenReturn(updatedEmployee);
+        Mockito.when(employeeRepositoryMock.findById(employeeId)).thenReturn(Optional.of(employee));
+        Mockito.when(employeeRepositoryMock.save(updatedEmployee)).thenReturn(updatedEmployee);
         // when
         final var result = employeeService.updateEmployee(employeeId, updateRequest);
         // then
         assertNotNull(result);
         assertEquals(employeeResponse, result);
-        Mockito.verify(employeeRepository, Mockito.times(1)).findById(employeeId);
-        Mockito.verify(employeeRepository, Mockito.times(1)).save(updatedEmployee);
+        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).findById(employeeId);
+        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).save(updatedEmployee);
     }
 
     @Test
@@ -107,11 +107,11 @@ public class EmployeeServiceTest {
         // given
         final var employeeId = 200L;
         final var expectedResult = new Employee(employeeId, "name", "surname", "dsds", "sdad", 111.0);
-        Mockito.when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(expectedResult));
+        Mockito.when(employeeRepositoryMock.findById(employeeId)).thenReturn(Optional.of(expectedResult));
         // when
         final var result = employeeService.getEmployeeById(employeeId);
         // then
-        Mockito.verify(employeeRepository, Mockito.times(1)).findById(employeeId);
+        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).findById(employeeId);
         assertEquals(expectedResult.getId(), result.getId());
         assertEquals(expectedResult.getName(), result.getName());
         assertEquals(expectedResult.getEmail(), result.getEmail());
@@ -123,13 +123,13 @@ public class EmployeeServiceTest {
         final var employee = new Employee(1, "michal2", "xxx", "xyz@abc", "xxx", 10000.0);
         final var expectedResult = new EmployeeResponse(1, "michal2", "xxx", "xyz@abc", "xxx", 10000.0);
         final var employeeRequest = new EmployeeRequest("aaa", "xxx", "xyz@abc", "xxx", 10000.0);
-        Mockito.when(employeeRepository.save(Mockito.any())).thenReturn(employee);
+        Mockito.when(employeeRepositoryMock.save(Mockito.any())).thenReturn(employee);
         // when
         final var result = employeeService.createEmployee(employeeRequest);
         // then
         Assertions.assertThat(result).isNotNull();
         Assertions.assertThat(expectedResult).isEqualTo(result);
-        Mockito.verify(employeeRepository, Mockito.times(1)).save(Mockito.any());
+        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).save(Mockito.any());
     }
 
     @Test
@@ -137,24 +137,24 @@ public class EmployeeServiceTest {
         // given
         final var employeeId = 1L;
         final var employee = new Employee(employeeId, "michal2", "xxx", "xyz@abc", "xxx", 10000.0);
-        Mockito.when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
+        Mockito.when(employeeRepositoryMock.findById(employeeId)).thenReturn(Optional.of(employee));
         // when
         employeeService.deleteEmployeeById(employeeId);
         // then
-        Mockito.verify(employeeRepository, Mockito.times(1)).findById(employeeId);
-        Mockito.verify(employeeRepository, Mockito.times(1)).deleteById(employeeId);
+        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).findById(employeeId);
+        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).deleteById(employeeId);
     }
 
     @Test
     void shouldThrowEmployeeNotFoundExceptionWhenDeletingNonExistentEmployee() {
         // given
         final var employeeId = 1L;
-        Mockito.when(employeeRepository.findById(employeeId)).thenReturn(Optional.empty());
+        Mockito.when(employeeRepositoryMock.findById(employeeId)).thenReturn(Optional.empty());
         // when
         assertThrows(EmployeeNotFoundException.class, () -> employeeService.deleteEmployeeById(employeeId));
         // then
-        Mockito.verify(employeeRepository, Mockito.times(1)).findById(employeeId);
-        Mockito.verify(employeeRepository, Mockito.never()).deleteById(Mockito.any());
+        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).findById(employeeId);
+        Mockito.verify(employeeRepositoryMock, Mockito.never()).deleteById(Mockito.any());
     }
 
     @Test
@@ -162,23 +162,23 @@ public class EmployeeServiceTest {
         // given
         final var employeeId = 20L;
         final var updatedEmployee = new EmployeeRequest("Michal", "Rutow", "micr@gmail.com", "junior", 4000.0);
-        Mockito.when(employeeRepository.findById(employeeId)).thenReturn(Optional.empty());
+        Mockito.when(employeeRepositoryMock.findById(employeeId)).thenReturn(Optional.empty());
         // when
         assertThrows(
                 EmployeeNotFoundException.class, () -> employeeService.updateEmployee(employeeId, updatedEmployee));
         // then
-        Mockito.verify(employeeRepository, Mockito.times(1)).findById(employeeId);
-        Mockito.verify(employeeRepository, Mockito.never()).save(Mockito.any());
+        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).findById(employeeId);
+        Mockito.verify(employeeRepositoryMock, Mockito.never()).save(Mockito.any());
     }
 
     @Test
     void shouldThrowEmployeeNotFoundExceptionWhenGettingByIdNonExistentEmployee() {
         // given
         final var employeeId = 1L;
-        Mockito.when(employeeRepository.findById(employeeId)).thenReturn(Optional.empty());
+        Mockito.when(employeeRepositoryMock.findById(employeeId)).thenReturn(Optional.empty());
         // when
         assertThrows(EmployeeNotFoundException.class, () -> employeeService.getEmployeeById(employeeId));
         // then
-        Mockito.verify(employeeRepository, Mockito.times(1)).findById(employeeId);
+        Mockito.verify(employeeRepositoryMock, Mockito.times(1)).findById(employeeId);
     }
 }

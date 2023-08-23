@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @ControllerAdvice
 public class ErrorHandlingControllerAdvice {
@@ -26,7 +25,7 @@ public class ErrorHandlingControllerAdvice {
         return new ResponseEntity<>(validationErrorResponse, HttpStatus.BAD_REQUEST).getBody();
     }
 
-    @ExceptionHandler({MethodArgumentNotValidException.class})
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<ValidationErrorResponse> onMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         List<ValidationErrorResponse.Violation> violations = e.getBindingResult().getFieldErrors().stream()
                 .map(fieldError -> ValidationErrorResponse.Violation.builder()

@@ -3,6 +3,7 @@ package com.taskone.restapi.controller;
 import com.taskone.restapi.model.EmployeeRequest;
 import com.taskone.restapi.model.EmployeeResponse;
 import com.taskone.restapi.service.EmployeeService;
+import com.taskone.restapi.service.TimeService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -25,6 +26,8 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
 
+    private final TimeService timeService;
+
     @PostMapping("/")
     public ResponseEntity<EmployeeResponse> createEmployee(@Valid @RequestBody EmployeeRequest employeeRequest) {
         EmployeeResponse employeeResponse = employeeService.createEmployee(employeeRequest);
@@ -32,13 +35,13 @@ public class EmployeeController {
     }
 
     @GetMapping(value = "/")
-    public List<EmployeeResponse> getAllEmployees(Pageable page) {
-        List<EmployeeResponse> employeeResponses = employeeService.getAllEmployees(page);
+    public List<EmployeeResponse> listEmployees(Pageable page) {
+        List<EmployeeResponse> employeeResponses = employeeService.getEmployees(page);
         return employeeResponses;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeResponse> getDetails(@PathVariable("id") Long id) {
+    public ResponseEntity<EmployeeResponse> getEmployee(@PathVariable("id") Long id) {
         return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 
@@ -75,17 +78,13 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<EmployeeResponse> deleteEmployee(@PathVariable Long id) {
-        EmployeeResponse employeeResponse = employeeService.deleteEmployeeById(id);
-        if (employeeResponse != null) {
-            return new ResponseEntity<>(employeeResponse, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public void deleteEmployee(@PathVariable Long id) {
+        employeeService.deleteEmployeeById(id);
     }
 
     @GetMapping("/time")
     public ResponseEntity<String> time() {
-        return new ResponseEntity<>(employeeService.currentTime(), HttpStatus.OK);
+        String time = employeeService.currentTime();
+        return new ResponseEntity<>(time, HttpStatus.OK);
     }
 }

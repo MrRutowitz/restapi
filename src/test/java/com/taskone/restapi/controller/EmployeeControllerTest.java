@@ -1,45 +1,42 @@
 package com.taskone.restapi.controller;
 
+import com.taskone.restapi.model.EmployeeRequest;
+import com.taskone.restapi.model.EmployeeResponse;
+import com.taskone.restapi.service.EmployeeService;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 
 @SpringBootTest
 class EmployeeControllerTest {
 
-    //    @MockBean // @spy sprawdz
-    //    private EmployeeService employeeService;
-    //
-    //    @Autowired
-    //    private EmployeeController employeeController = new EmployeeController(employeeService);
-    //
-    //    @Test
-    //    void shouldAddNewEmployee() {
-    //        final var result = employeeController.createEmployee(
-    //                new EmployeeRequest("name", "username", "email@a", "jobposition", 1000.0));
-    //        Assertions.assertThat(result).isNotNull();
-    //        Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-    //    }
-    //        @Test
-    //        void shouldUpdateExistingEmployee() {
-    //            //given toDo mockitowhen
-    //            final int id = 1;
-    //            final String name = "Michal";
-    //            final String username = "micrut";
-    //            final String email = "micrut@gmail.com";
-    //            final String jobpostion = "backend";
-    //            final int salary = 10000;
-    //
-    //            final var employee = Employee.builder().id(id).name(name).username(username).build();
-    //            //when
-    //            final ResponseEntity<Employee> result = employeeController.updateEmployee(1, new
-    // EmployeeRequest("name",
-    //     "username", "email", "jobposition", 1000.0));
-    //            //then
-    //            Assertions.assertThat(result).isNotNull();
-    //            final var resultEmployee = result.getBody();
-    //            Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-    //            Assertions.assertThat(resultEmployee).isNotNull();
-    //            Assertions.assertThat(resultEmployee.getId()).isEqualTo(id);
-    //            Assertions.assertThat(resultEmployee.getName()).isEqualTo(name);
-    //            Assertions.assertThat(resultEmployee.getUsername()).isEqualTo(username);
-    //        }
+    @MockBean
+    private EmployeeService employeeServiceMock;
+
+    @Autowired
+    private EmployeeController employeeController;
+
+    @Test
+    void shouldCreateNewEmployeeMockito() {
+        // given
+        final var expectedResult = new EmployeeResponse(1, "m11", "aaa", "post@post", "aaa", 111133.0);
+        final var employeeRequest = new EmployeeRequest("name", "username", "aa@ss", "jobposition", 1000.0);
+        Mockito.when(employeeServiceMock.createEmployee(employeeRequest)).thenReturn(expectedResult);
+        // when
+        final var result = employeeController.createEmployee(employeeRequest);
+        // then
+        Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(expectedResult).isEqualTo(result.getBody());
+        Assertions.assertThat(expectedResult.getName())
+                .isEqualTo(result.getBody().getName());
+        Assertions.assertThat(expectedResult.getEmail())
+                .isEqualTo(result.getBody().getEmail());
+        Assertions.assertThat(expectedResult.getId()).isEqualTo(result.getBody().getId());
+        Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        Mockito.verify(employeeServiceMock, Mockito.times(1)).createEmployee(employeeRequest);
+    }
 }
